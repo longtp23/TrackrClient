@@ -7,7 +7,7 @@ import {
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import { DetailCarousel } from "../../../components/Carousels/detailCarousel/DetailCarousel";
@@ -34,6 +34,7 @@ const DetailContainer = styled.div`
 `;
 
 const GameDetail = () => {
+  const location = useLocation();
   const slug = location.pathname.split("/")[2];
   const userAuth = useAuthUser();
   const [gameDetail, setGameDetail] = useState();
