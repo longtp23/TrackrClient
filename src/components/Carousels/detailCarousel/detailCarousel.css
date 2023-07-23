@@ -1,0 +1,9 @@
+.imageDetailCarousel{
+  height: auto;
+  opacity: 1;
+  z-index: 99;
+}
+
+.imageDetailCarouselContainer{
+  width: 690px;
+}

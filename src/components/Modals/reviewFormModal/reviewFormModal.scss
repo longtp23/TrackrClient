@@ -1,0 +1,112 @@
+.openReviewFormBtn {
+    background-color: #0d99ff !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 15px;
+    font-size: 15px;
+    width: 190px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    border: none;
+}
+.openReviewFormBtn:hover {
+    width: 90%;
+}
+
+.reviewFormPanel {
+    background-color: #151515;
+    border-radius: 5px;
+}
+span {
+    font-weight: 200;
+}
+
+.reviewForm {
+    display: flex;
+    padding: 20px;
+    .left {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        .reviewProfilePic {
+            width: 100px;
+            background-color: rgb(36, 36, 36);
+            border: 2px solid #338dc8;
+        }
+    }
+    .right {
+        flex: 6;
+        .reviewSelectOptions {
+            margin-bottom: 10px;
+            display: flex;
+            background-color: rgb(36, 36, 36);
+            padding: 5px;
+            margin-top: 10px;
+            .reviewSelectOption {
+                margin-right: 25px;
+                select {
+                    background-color: #151515;
+                    outline: none;
+                    padding: 5px 10px;
+                    padding-left: 2px;
+                    margin-left: 5px;
+                }
+            }
+        }
+        textarea {
+            width: 100%;
+            background-color: rgb(36, 36, 36);
+            min-height: 100px;
+            caret-color: white;
+        }
+        textarea:focus-visible {
+            outline: none !important;
+            border: 2px solid #338dc8;
+        }
+        .reviewRatingBtns {
+            .ratingBtnGr {
+                margin-top: 15px;
+                display: flex;
+                input[type="radio"] {
+                    display: none;
+                }
+                label {
+                    border: 1px solid white;
+                    border-radius: 10px;
+                    padding: 10px;
+                    margin-right: 10px;
+                    transition: all ease 0.2s;
+                    cursor: pointer;
+                    font-size: 25px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                input#radio-good:checked + label {
+                    background-color: #14ae5c;
+                    border-color: #14ae5c;
+                    color: black;
+                }
+                input#radio-neutral:checked + label {
+                    background-color: #ffcd29;
+                    border-color: #ffcd29;
+                    color: black;
+                }
+                input#radio-bad:checked + label {
+                    background-color: #f24822;
+                    border-color: #f24822;
+                    color: black;
+                }
+            }
+        }
+        .reviewSubmitBtns {
+            .reviewSubmitBtn {
+                border: 1px solid #338dc8;
+                background-color: #338dc8;
+            }
+        }
+    }
+}

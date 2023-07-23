@@ -1,0 +1,79 @@
+.reviewCardContainer{
+    width: 80%;
+    margin-bottom: 40px;
+    .reviewCardWrapper {
+        width: 100%;
+        border-radius: 5px;
+        .top {
+            display: flex;
+            width: 100%;
+    
+            .rating {
+                color: black;
+                font-size: 60px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 10px;
+            }
+            .reviewInfo {
+                flex: 1;
+                padding: 5px 10px;
+                display: flex;
+                
+                justify-content: space-between;
+                padding-left: 10px;
+                background-color: rgb(36, 36, 36);
+                .userInfo{
+                    width: 175px;
+                    .storeName {
+                        font-size: 25px;
+                        margin-bottom: 5px;
+                    }
+                    .username {
+                        font-weight: 300;
+                    }
+                }
+            }
+            .helpfulCount {
+                margin-left: 295px;
+                margin-right: 50px;
+            }
+            .timestamp {
+                font-style: italic;
+                font-size: 14px;
+                font-weight: 200;
+            }
+        }
+        .middle {
+            padding: 20px;
+        }
+        .bottom {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            padding-left: 6px;
+            font-style: italic;
+            font-weight: 200;
+            background-color: rgb(36, 36, 36);
+            margin-top: 20px;
+            .replyButtons{
+                display: flex;
+                .replyItem{
+                    display: flex;
+                    align-items: center;
+                    margin-right: 15px;
+                    font-weight: 500;
+                }
+                .replyItem:hover {
+                    color: #338dc8;
+                }
+            }
+            
+            
+            .helfulButtons {
+                display: flex;
+            }
+        }
+    }
+}

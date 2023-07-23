@@ -1,0 +1,56 @@
+.topCatagoryCounterContainer {
+    flex: 1;
+    padding: 10px;
+    .topCatagoryStatCount {
+        font-size: 25px;
+        span {
+            font-size: 70px;
+            font-weight: 700;
+            margin-right: 15px;
+        }
+    }
+    .topCatagoryCounterRankingWrapper {
+        .topCatagoryCounterRankingItem {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+            .topCatagoryName {
+                flex: 2;
+                display: flex;
+                justify-content: space-between;
+                padding: 15px 0px;
+                padding-right: 10px;
+                border-bottom: 1px solid gray;
+                .left {
+                    display: flex;
+                    margin-right: 15px;
+                    span {
+                        font-weight: 500;
+                    }
+                    div {
+                        width: 10px;
+                        margin-right: 10px;
+                    }
+                }
+                .right {
+                    display: flex;
+                    align-items: center;
+                    font-weight: 200;
+                    font-size: 12px;
+                }
+            }
+            .topCatagoryBarContainer {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                width: 100%;
+                margin-left: 15px;
+                .topCatagoryBar {
+                    height: 10px;
+                    border-radius: 15px;
+                    border-color: transparent;
+                }
+            }
+        }
+    }
+}

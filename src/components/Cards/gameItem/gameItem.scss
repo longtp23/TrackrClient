@@ -1,0 +1,134 @@
+.gameItemContainer {
+    padding: 5px;
+    width: 316px;
+    height: 420px;
+    background-color: #202020;
+    border-radius: 5px;
+    
+    cursor: pointer;
+    transition: all ease 0.5s;
+    .gameItemImg {
+        img {
+            width: 300px;
+            object-fit: cover;
+            height: 200px;
+        }
+    }
+    .gameItemInfo {
+        padding: 5px;
+        // border-top: 0.5px solid gray;
+        margin-top: 10px;
+        h3 {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .subGameItem {
+            display: flex;
+            height: 20px;
+            .releaseDate {
+                border-radius: 5px;
+                color: black;
+                background-color: white;
+                font-size: 9px;
+                letter-spacing: 3px;
+                font-style: italic;
+                display: inline-block;
+                padding: 3px;
+                font-weight: 500;
+            }
+            .platforms {
+                margin-left: 20px;
+                display: flex;
+                overflow: hidden;
+                img {
+                    height: auto;
+                    width: auto;
+                    margin-right: 15px;
+                }
+            }
+        }
+        .bestPriceCopiesContainer {
+            .bestPriceCopy {
+                align-items: center;
+                transition: all 0.5s ease;
+                padding: 5px;
+                .bestPriceCopyStore {
+                    flex: 3;
+                }
+                .bestPriceCopyPlatform {
+                    flex: 2;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    .gameItemPlatformSmallIcon {
+                        width: 60px;
+                    }
+                    .gameItemPlatformLargeIcon {
+                        width: 20px;
+                    }
+                }
+                .bestPriceCopyPrice {
+                    flex: 2;
+                    padding-left: 30px;
+                    font-weight: bold;
+                }
+            }
+            .bestPriceCopy:nth-child(1) {
+                .bestPriceCopyPrice {
+                    color: #14ae5c;
+                }
+            }
+            .bestPriceCopy:nth-child(2) {
+                .bestPriceCopyPrice {
+                    color: #ffcd29;
+                }
+                border-radius: 5px;
+            }
+            .bestPriceCopy:nth-child(3) {
+                .bestPriceCopyPrice {
+                    color: #f24822;
+                }
+            }
+            .bestPriceCopy:nth-child(1):hover {
+                background-color: #14ae5c;
+                border-radius: 5px;
+
+                .bestPriceCopyPrice {
+                    color: white;
+                }
+            }
+            .bestPriceCopy:nth-child(2):hover {
+                border-radius: 5px;
+                background-color: #ffcd29;
+                color: black;
+                .bestPriceCopyPrice {
+                    color: black;
+                }
+            }
+            .bestPriceCopy:nth-child(3):hover {
+                background-color: #f24822;
+                border-radius: 5px;
+                .bestPriceCopyPrice {
+                    color: white;
+                }
+            }
+        }
+    }
+}
+
+.gameItemContainer:hover {
+    transform: scale(1.1);
+}
+
+.gameItemContainer:nth-child(1n) {
+    border: 3px solid #ffcd29;
+    box-shadow: 7px 11px 44px -3px rgba(255, 205, 41, 0.2);
+}
+.gameItemContainer:nth-child(2n) {
+    border: 3px solid #14ae5c;
+    box-shadow: 7px 11px 44px -3px #14ae5c33;
+}
+.gameItemContainer:nth-child(3n) {
+    border: 3px solid #f24822;
+    box-shadow: 7px 11px 44px -3px #f2482233;
+}

@@ -1,0 +1,181 @@
+.navbarContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #151515;
+    padding: 10px;
+    color: #e6e6e6;
+    .left {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        .logoWrapper {
+            display: flex;
+            flex: 1;
+            margin-left: 15px;
+            cursor: pointer;
+            .logoLeft {
+                font-size: 23px;
+                font-weight: 900;
+                letter-spacing: 5px;
+                color: yellow;
+            }
+            .logoRight {
+                font-size: 23px;
+                font-weight: 900;
+                letter-spacing: 5px;
+                color: red;
+            }
+        }
+        .navBarItemWrapper {
+            flex: 1;
+            display: flex;
+            .navBarItem {
+                flex: 1;
+            }
+        }
+    }
+    .center {
+        flex: 1;
+        .searchBarWrapper {
+            border-radius: 15px;
+            background-color: #3b3b3b;
+            width: 30vw;
+            display: flex;
+            align-items: center;
+            transition: all 0.5s ease;
+
+            input::placeholder {
+                text-align: center;
+                position: relative;
+                transform: translateX(-50%);
+                left: 45%;
+            }
+            .searchIcon {
+                padding-left: 5px;
+            }
+            .searchBar {
+                // font-size: 15px;
+                background-color: transparent;
+                color: #3b3b3b;
+                border: none;
+                height: 30px;
+                padding: 5px;
+                width: 31vw;
+            }
+            .searchBar:focus {
+                outline: none;
+            }
+        }
+        .searchBarWrapper:focus-within {
+            background-color: #e6e6e6;
+            color: black;
+            transform: scale(1.1);
+        }
+        .searchBarWrapper:hover {
+            background-color: #e6e6e6;
+            color: black;
+            transform: scale(1.1);
+        }
+    }
+    .right {
+        flex: 1;
+        .navBarItemWrapper {
+            display: flex;
+            align-items: center;
+            justify-content: right;
+            margin-right: 30px;
+            .navBarItem {
+                margin-right: 30px;
+                font-size: 30px;
+            }
+            .notificationDropdown {
+                position: relative;
+                cursor: pointer;
+                .notificationDropdownContent {
+                    position: absolute;
+                    margin-top: 25px;
+                    right: -25px;
+                    z-index: 10;
+                    background-color: #151515;
+                    width: 400px;
+                    h3 {
+                        font-size: 20px;
+                        font-weight: bold;
+                        margin-bottom: 10px;
+                        padding: 0px 10px;
+                    }
+                    a:nth-child(2n) > div {
+                        background-color: #2d2d2d;
+                    }
+
+                    .notification {
+                        padding: 10px;
+                        transition: all ease 0.2s;
+                        border: 3px solid #151515;
+                        b {
+                            font-weight: bold;
+                        }
+                        b:nth-child(2) {
+                            color: #14ae5c;
+                        }
+                        span {
+                            font-weight: 300;
+                        }
+                        div {
+                            font-weight: 200;
+                            font-style: italic;
+                            margin-top: 5px;
+                        }
+                    }
+                    .notification:hover {
+                        background-color: hsla(0, 0%, 100%, 0.4);
+                    }
+
+                    .notification:nth-child(2n):hover {
+                        background-color: hsla(0, 0%, 100%, 0.4);
+                    }
+                }
+            }
+            .dropdownMenu {
+                position: relative;
+                display: block;
+                width: 42px;
+                transition: all 0.4s ease;
+                .profilePic {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    img {
+                        width: 42px;
+                        height: 42px;
+                        border-radius: 50%;
+                        margin-bottom: 9px;
+                    }
+                }
+                .dropdownContent {
+                    display: none;
+                    position: absolute;
+                    background-color: #f1f1f1;
+                    width: 100px;
+                    z-index: 1;
+                    background-color: #151515;
+                    padding: 10px 5px;
+                    a {
+                        padding: 5px 0px;
+                    }
+                    button {
+                        padding: 5px 0px;
+                    }
+                }
+            }
+            .dropdownMenu:hover {
+                width: 100px;
+            }
+            .dropdownMenu:hover .dropdownContent {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    }
+}

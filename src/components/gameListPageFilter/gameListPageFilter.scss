@@ -1,0 +1,136 @@
+.gameListPageFilterContainer {
+    flex: 1;
+    top: 20px;
+    position: sticky;
+    margin: 20px;
+    padding: 20px;
+    border: 3px solid #9747ff;
+    height: fit-content;
+    border-radius: 5px;
+    background-color: #202020;
+    input {
+        margin-right: 5px;
+    }
+    input[type="radio"] {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        padding: 2px;
+        border: 2px solid #ccc;
+        outline: none;
+        cursor: pointer;
+        position: relative;
+        transition: all ease 0.1s;
+    }
+    .filterCatagoryWrapper {
+        margin: 10px 0px;
+        h3 {
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 3px;
+        }
+        .inputsWrapper {
+            .inputLabel {
+                display: flex;
+                align-items: center;
+                font-weight: 200;
+                font-style: italic;
+                cursor: pointer;
+            }
+            .inputLabel:nth-child(1) input[type="radio"]:checked {
+                background-color: #14ae5c;
+            }
+            .inputLabel:nth-child(2) input[type="radio"]:checked {
+                background-color: #ffcd29;
+            }
+            .inputLabel:nth-child(3) input[type="radio"]:checked {
+                background-color: #f24822;
+            }
+            .inputLabel:nth-child(4) input[type="radio"]:checked {
+                background-color: #9747ff;
+            }
+            
+        }
+        .genresToggleBtnGr {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            input[type="checkbox"] {
+                display: none;
+            }
+
+            label {
+                border: 1px solid white;
+                border-radius: 10px;
+                padding: 5px;
+                margin: 3px;
+                transition: all ease 0.2s;
+                cursor: pointer;
+            }
+        }
+        .genresToggleBtnGr:nth-child(2) {
+            input[type="checkbox"]:checked + label {
+                background-color: #14ae5c;
+                border-color: #14ae5c;
+            }
+        }
+        .platformsToggleBtnGr {
+            display: flex;
+            input[type="checkbox"] {
+                display: none;
+            }
+
+            label {
+                border: 1px solid white;
+                border-radius: 10px;
+                padding: 5px;
+                margin: 3px;
+                transition: all ease 0.2s;
+                cursor: pointer;
+            }
+
+            input#tbg-btn-ps:checked + label {
+                background-color: #0d99ff;
+                border-color: #0d99ff;
+            }
+            input#tbg-btn-xbox:checked + label {
+                background-color: #14ae5c;
+                border-color: #14ae5c;
+            }
+            input#tbg-btn-nintendo:checked + label {
+                background-color: #f24822;
+                border-color: #f24822;
+            }
+        }
+    }
+    .btnWrapper {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        .submitFilter {
+            background-color: #338dc8;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+        .clearFilter {
+            background-color: transparent;
+            border: 1px solid white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-left: 10px;
+            transition: all ease 0.3s;
+        }
+        .clearFilter:hover{
+            background-color: #f24822;
+            border-color: #f24822;
+        }
+    }
+    .filterTitle {
+        text-align: center;
+        font-size: 20px;
+    }
+}

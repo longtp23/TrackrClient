@@ -1,0 +1,42 @@
+.replyCardWrapper {
+    display: flex;
+    margin-top: 20px;
+    .left {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 70px;
+        padding: 20px ;
+
+    }
+    .right {
+        width: 100%;
+        .replyInfo {
+            display: flex;
+            justify-content: space-between;
+            background-color: rgb(36, 36, 36);
+            padding: 10px 20px;
+            .replyUserInfo {
+                flex: 4;
+                font-size: 20px;
+            }
+            .isHelpful{
+// margin-right: 20px;
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 13px;
+            }
+            .timestamp {
+                flex: 2;
+                text-align: right;
+                font-style: italic;
+                font-size: 14px;
+                font-weight: 200;
+            }
+        }
+        .replyContent{
+            padding: 10px 20px;
+        }
+    }
+}

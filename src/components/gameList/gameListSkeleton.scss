@@ -1,0 +1,38 @@
+.skeletonCard {
+    margin: 20px;
+    background-color: #202020;
+    border-radius: 5px;
+    padding: 5px;
+
+    .skeletonImg {
+        width: 300px;
+        height: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: solid 1px gray;
+    }
+    .skeletonInfo {
+        margin-top: 10px;
+        .skeletonTitle {
+            width: 35%;
+            height: 10px;
+        }
+        .sub{
+            display: flex;
+            align-items: center;
+            .skeletonDate {
+                width: 50px;
+                height: 10px;
+            }
+            .skeletonPlaform {
+                margin-left: 15px;
+                width: 15px;
+                height: 15px;
+                
+            }
+            
+
+        }
+    }
+}
