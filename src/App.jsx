@@ -1,7 +1,7 @@
 import { ThemeProvider, createTheme } from "@mui/material";
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import { SkeletonTheme } from "react-loading-skeleton";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
@@ -46,7 +46,7 @@ const darkTheme = createTheme({
       <SkeletonTheme baseColor="#202020" highlightColor="#444">
         {/* <CssBaseline/> */}
         <ToastContainer />
-        <BrowserRouter>
+        <HashRouter>
         <ScrollToTop/>
           <Routes>
             <Route exact path="/" element={<Home />} />
@@ -65,7 +65,7 @@ const darkTheme = createTheme({
             <Route path="/admin/games" element={<AdminRoute Component={AdminManageGames} />}></Route>
             <Route path="/admin/addGame" element={<AdminRoute Component={AdminAddGame} />}></Route>
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
       </SkeletonTheme>
     </ThemeProvider>
   );
