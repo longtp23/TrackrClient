@@ -11,7 +11,7 @@ import {
   ThumbsUpDown,
 } from "@mui/icons-material";
 import { UserProfileMenu } from "../../../components/userProfileMenu/UserProfileMenu";
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, CircularProgress } from "@mui/material";
 import { userRequest } from "../../../requests/requestMethods";
 import { UserProfileReviewCards } from "../../../components/Cards/userProfileReviewCards/UserProfileReviewCards";
 
@@ -20,11 +20,13 @@ const UserProfileReviewPage = () => {
   const userId = authUser().userId;
   const location = useLocation().pathname.split("/")[3];
   const [reviews, setReviews] = useState([]);
+  const [isLoading,setIsLoading] = useState(true)
 
   const getReviews = async () => {
     try {
       const res = await userRequest.get(`/review/${userId}`);
       setReviews(res.data);
+      setIsLoading(false)
     } catch (error) {
       console.log(error);
     }
@@ -57,6 +59,7 @@ const UserProfileReviewPage = () => {
             </div>
           </div>
           <UserProfileMenu location={location} userId={userId} />
+          {!isLoading ?
           <div className="accordionsWrapper">
             <div className="accordionWrapper">
               <Accordion defaultExpanded={true}>
@@ -178,7 +181,18 @@ const UserProfileReviewPage = () => {
                 </AccordionDetails>
               </Accordion>
             </div>
+          </div>: (
+            <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "30vh",
+            }}
+          >
+            <CircularProgress />
           </div>
+          )}
         </div>
       </div>
     </div>

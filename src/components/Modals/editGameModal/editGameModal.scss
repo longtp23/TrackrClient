@@ -1,0 +1,13 @@
+.editGameContainer {
+    padding: 30px;
+    form {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        .inputContainer{
+            padding: 10px;
+            .textInput{
+                width: 100%;
+            }
+        }
+    }
+}

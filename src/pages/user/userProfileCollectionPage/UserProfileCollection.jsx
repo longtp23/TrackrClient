@@ -16,7 +16,12 @@ import { UserProfileMenu } from "../../../components/userProfileMenu/UserProfile
 import { userRequest } from "../../../requests/requestMethods";
 import { useEffect, useState } from "react";
 import { CollectionCatagoryChart } from "../../../components/Charts/collectionCatagoryChart/CollectionCatagoryChart";
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  CircularProgress,
+} from "@mui/material";
 import { CollectionGameCards } from "../../../components/Cards/collectionGameCard/CollectionGameCards";
 
 const UserProfileCollection = () => {
@@ -25,6 +30,7 @@ const UserProfileCollection = () => {
   const location = useLocation().pathname.split("/")[3];
   const [collection, setCollection] = useState([]);
   const [collectionStats, setCollectionStats] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   const getCollection = async () => {
     const res = await userRequest.get(`/collection/${userId}`);
@@ -34,8 +40,9 @@ const UserProfileCollection = () => {
   const getCollectionStats = async () => {
     const res = await userRequest.get(`/collection/topDevGernes/${userId}`);
     setCollectionStats(res.data);
+    setIsLoading(false);
   };
-
+  console.log(isLoading);
   useEffect(() => {
     getCollection();
     getCollectionStats();
@@ -75,7 +82,7 @@ const UserProfileCollection = () => {
               <h1>{authUser().username}</h1>
             </div>
             <div className="right">
-            <Link to={`/userProfile/${userId}/Settings`}>
+              <Link to={`/userProfile/${userId}/Settings`}>
                 <button className="userProfileSettingBtn">
                   <Settings style={{ marginRight: "5px" }} /> Settings
                 </button>
@@ -83,7 +90,7 @@ const UserProfileCollection = () => {
             </div>
           </div>
           <UserProfileMenu location={location} userId={userId} />
-          {collection.length !== 0 && (
+          {!isLoading ? (
             <div className="accordionsWrapper">
               <div className="accordionWrapper">
                 <Accordion>
@@ -306,6 +313,17 @@ const UserProfileCollection = () => {
                   </AccordionDetails>
                 </Accordion>
               </div>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: "30vh",
+              }}
+            >
+              <CircularProgress />
             </div>
           )}
         </div>

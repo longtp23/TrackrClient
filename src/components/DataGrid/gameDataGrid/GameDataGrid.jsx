@@ -6,12 +6,13 @@ import {
   Wifi,
 } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
+import { useAuthUser } from "react-auth-kit";
+import { Link } from "react-router-dom";
 import { publicRequest, userRequest } from "../../../requests/requestMethods";
 import { resize200 } from "../../../utils/resizeImage";
-import { WarningModal } from "../../Modals/warningModal/WarningModal";
-import { Link } from "react-router-dom";
 import { useToastError, useToastSuccess } from "../../../utils/toastSettings";
-import { useAuthUser } from "react-auth-kit";
+import { WarningModal } from "../../Modals/warningModal/WarningModal";
+import { EditGameModal } from "../../Modals/editGameModal/EditGameModal";
 
 const DisableButton = () => {
   return (
@@ -88,7 +89,8 @@ export const GameDataGrid = ({ gameData }) => {
                 <th>Genre</th>
                 <th>Developer</th>
                 <th>Publisher</th>
-                <th>Status</th>
+                <th style={{ textAlign: "center" }}>Edit</th>
+                <th style={{ textAlign: "center" }}>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -110,6 +112,9 @@ export const GameDataGrid = ({ gameData }) => {
                   <td>{game.genres[0]}</td>
                   <td>{game.developers[0]}</td>
                   <td>{game.publishers[0]}</td>
+                  <td>
+                    <EditGameModal gameData={game} />
+                  </td>
                   <td>
                     {game.isDisabled === false ? (
                       <WarningModal

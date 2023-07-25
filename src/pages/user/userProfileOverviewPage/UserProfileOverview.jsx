@@ -8,6 +8,7 @@ import { Link, useLocation } from "react-router-dom";
 import { UserProfileMenu } from "../../../components/userProfileMenu/UserProfileMenu";
 import { TopCatagoryCounter } from "../../../components/Common/topCatagoryCounter/TopCatagoryCounter";
 import { Settings } from "@mui/icons-material";
+import { CircularProgress } from "@mui/material";
 
 const UserProfileOverview = () => {
   const authUser = useAuthUser();
@@ -18,6 +19,7 @@ const UserProfileOverview = () => {
   const [gamesEachYear, setGamesEachYear] = useState({});
   const [topDevGenre, setTopDevGenre] = useState({});
   const location = useLocation().pathname.split("/")[3];
+  const [isLoading,setIsLoading] = useState(true)
 
   const getStatsCount = async () => {
     const getCollectionGameCount = await userRequest.get(
@@ -40,6 +42,7 @@ const UserProfileOverview = () => {
       `/collection/topDevGernes/${userId}`
     );
     setTopDevGenre(numGenresDevs.data);
+    setIsLoading(false)
   };
 
   useEffect(() => {
@@ -57,7 +60,7 @@ const UserProfileOverview = () => {
               <h1>{authUser().username}</h1>
             </div>
             <div className="right">
-            <Link to={`/userProfile/${userId}/Settings`}>
+              <Link to={`/userProfile/${userId}/Settings`}>
                 <button className="userProfileSettingBtn">
                   <Settings style={{ marginRight: "5px" }} /> Settings
                 </button>
@@ -65,59 +68,70 @@ const UserProfileOverview = () => {
             </div>
           </div>
           <UserProfileMenu location={location} userId={userId} />
-          <div className="userProfileContentStats">
-            <div className="contentStat">
-              <Link to={`/userProfile/${userId}/Collection`}>
-                <div className="contentStatCount">
-                  <h3>{collectionGameCount}</h3>
-                  <span>games</span>
-                </div>
+          { !isLoading ?
+          <div>
+            <div className="userProfileContentStats">
+              <div className="contentStat">
+                <Link to={`/userProfile/${userId}/Collection`}>
+                  <div className="contentStatCount">
+                    <h3>{collectionGameCount}</h3>
+                    <span>games</span>
+                  </div>
+                  <p>
+                    Compile your personal goty titles, organize games by theme,
+                    make a list of great co-op games to play with friends or
+                    whatever comes to your mind.
+                  </p>
+                </Link>
+              </div>
+              <div className="contentStat">
+                <Link to={`/userProfile/${userId}/Reviews`}>
+                  <div className="contentStatCount">
+                    <h3>{reviewCount}</h3>
+                    <span>reviews</span>
+                  </div>
+                </Link>
                 <p>
-                  Compile your personal goty titles, organize games by theme,
-                  make a list of great co-op games to play with friends or
-                  whatever comes to your mind.
+                  Rate and review the stores. Your opinion matters, share it!
                 </p>
-              </Link>
+              </div>
+              <div className="contentStat">
+                <Link to={`/userProfile/${userId}/Wishlist`}>
+                  <div className="contentStatCount">
+                    <h3>{wishlistGameCount}</h3>
+                    <span>games</span>
+                  </div>
+                </Link>
+                <p>
+                  Track your favorite titles and never miss a great deal again.
+                  Get real-time price updates, price drop alerts, and compare
+                  prices across different retailers.
+                </p>
+              </div>
             </div>
-            <div className="contentStat">
-              <Link to={`/userProfile/${userId}/Reviews`}>
-                <div className="contentStatCount">
-                  <h3>{reviewCount}</h3>
-                  <span>reviews</span>
-                </div>
-              </Link>
-              <p>Rate and review the stores. Your opinion matters, share it!</p>
+            <div className="userProfileGamesEachYearChart">
+              <h3>Games by release year</h3>
+              {gamesEachYear && (
+                <GamesEachYearChart chartData={gamesEachYear} />
+              )}
             </div>
-            <div className="contentStat">
-              <Link to={`/userProfile/${userId}/Wishlist`}>
-                <div className="contentStatCount">
-                  <h3>{wishlistGameCount}</h3>
-                  <span>games</span>
-                </div>
-              </Link>
-              <p>
-                Track your favorite titles and never miss a great deal again.
-                Get real-time price updates, price drop alerts, and compare
-                prices across different retailers.
-              </p>
+            <div className="topCatagoryCounterWrapper">
+              <TopCatagoryCounter
+                title={"genres"}
+                topData={topDevGenre.genres}
+                topNum={topDevGenre.numGenres}
+              />
+              <TopCatagoryCounter
+                title={"developers"}
+                topData={topDevGenre.developers}
+                topNum={topDevGenre.numDevelopers}
+              />
             </div>
-          </div>
-          <div className="userProfileGamesEachYearChart">
-            <h3>Games by release year</h3>
-            {gamesEachYear && <GamesEachYearChart chartData={gamesEachYear} />}
-          </div>
-          <div className="topCatagoryCounterWrapper">
-            <TopCatagoryCounter
-              title={"genres"}
-              topData={topDevGenre.genres}
-              topNum={topDevGenre.numGenres}
-            />
-            <TopCatagoryCounter
-              title={"developers"}
-              topData={topDevGenre.developers}
-              topNum={topDevGenre.numDevelopers}
-            />
-          </div>
+          </div> :(
+             <div style={{display:"flex", justifyContent:"center", alignItems:"center", minHeight:"30vh"}}>
+             <CircularProgress />
+           </div>
+          )}
         </div>
       </div>
     </div>

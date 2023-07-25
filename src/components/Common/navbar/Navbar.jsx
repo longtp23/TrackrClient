@@ -1,7 +1,10 @@
 import "./navbar.scss";
 import {
+  Games,
   Logout,
+  ManageAccounts,
   Notifications,
+  RateReview,
   Search,
   Settings,
   ShoppingCart,
@@ -71,10 +74,18 @@ export const Navbar = () => {
           <h1 className="logoRight">r</h1>
         </Link>
         <div className="navBarItemWrapper">
+          { authUser()?.isAdmin &&
+          <Link className="navBarItem" to="/admin">
+            <div style={{display:"flex", alignItems:"center"}}><ManageAccounts style={{marginRight:"10px", color:"#ffcd29"}}/> Manange</div>
+          </Link>}
           <Link className="navBarItem" to="/games">
-            <div>Games</div>
+            <div style={{display:"flex", alignItems:"center"}}><Games style={{marginRight:"10px", color:"#14ae5c"}}/> Games</div>
           </Link>
-          <div className="navBarItem">Reviews</div>
+          <div className="navBarItem">
+            <Link to="/reviews">
+            <div style={{display:"flex", alignItems:"center"}}><RateReview style={{marginRight:"10px", color:"#0d99ff"}}/> Reviews</div>
+            </Link>
+          </div>
         </div>
       </div>
       <div className="center">
@@ -92,11 +103,11 @@ export const Navbar = () => {
       <div className="right">
         <div className="navBarItemWrapper">
           <Link to={`/userProfile/${userId}/Wishlist`}>
-            <ShoppingCart className="navBarItem" />
+            <ShoppingCart className="navBarItem wishlist" />
           </Link>
           <div className="notificationDropdown">
             <Notifications
-              className="navBarItem"
+              className="navBarItem notification"
               onClick={handleNotification}
             />
             {open && (
@@ -135,7 +146,7 @@ export const Navbar = () => {
                 <img src={authUser()?.profilePic} />
               </Link>
               <div className="dropdownContent">
-                <Link>
+                <Link to={`/userProfile/${userId}/Settings`}>
                   <Settings />
                   Settings
                 </Link>

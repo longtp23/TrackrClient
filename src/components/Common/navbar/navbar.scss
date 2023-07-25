@@ -28,7 +28,7 @@
             }
         }
         .navBarItemWrapper {
-            flex: 1;
+            flex: 2;
             display: flex;
             .navBarItem {
                 flex: 1;
@@ -88,6 +88,15 @@
             .navBarItem {
                 margin-right: 30px;
                 font-size: 30px;
+                transition: all ease 0.2s;
+            }
+            .navBarItem.wishlist:hover{
+                transform: scale(1.1);
+                color: rgb(151, 71, 255);
+            }
+            .navBarItem.notification:hover{
+                transform: scale(1.1);
+                color: rgb(242, 72, 34);
             }
             .notificationDropdown {
                 position: relative;

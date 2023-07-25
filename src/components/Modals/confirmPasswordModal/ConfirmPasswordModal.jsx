@@ -6,6 +6,7 @@ import { toastSettings } from "../../../utils/toastSettings";
 import { toast } from "react-toastify";
 import { userRequest } from "../../../requests/requestMethods";
 import { useAuthUser } from "react-auth-kit";
+import { TextField } from "@mui/material";
 
 export const ConfirmPasswordModal = ({ userInfo }) => {
   let [isOpen, setIsOpen] = useState(false);
@@ -121,25 +122,27 @@ export const ConfirmPasswordModal = ({ userInfo }) => {
                   <div className="warningContent">
                     <div className="userInfoInputContainers">
                       <div className="userInfoInputContainer">
-                        <div>
-                          <label htmlFor="password">Password</label>
-                        </div>
-                        <input
+                        <TextField
+                          style={{ width: "230px" }}
+                          label="Password"
+                          variant="outlined"
                           name="password"
                           type="password"
-                          placeholder={"Password"}
+                          placeholder="Password"
                           onChange={handleInputChange}
+                          color="info"
                         />
                       </div>
                       <div className="userInfoInputContainer">
-                        <div>
-                          <label htmlFor="password">Confirm Password</label>
-                        </div>
-                        <input
-                          name="confirmPassword"
+                        <TextField
+                          style={{ width: "230px" }}
+                          label="Confirm Password"
+                          variant="outlined"
+                          name="comfirmPassword"
                           type="password"
-                          placeholder={"Confirm Password"}
+                          placeholder="Confirm Password"
                           onChange={handleInputChange}
+                          color="info"
                         />
                       </div>
                     </div>

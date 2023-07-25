@@ -8,6 +8,7 @@ import {
 import { publicRequest } from "../../../requests/requestMethods";
 import { useToastError, useToastSuccess } from "../../../utils/toastSettings";
 import "./register.scss";
+import { TextField } from "@mui/material";
 
 const Register = () => {
   const [inputs, setInputs] = useState({});
@@ -69,40 +70,50 @@ const Register = () => {
               <h1 className="registerTagline">The journey starts here</h1>
               <div className="registerInputContainers">
                 <div className="registerInputContainer">
-                  <div>Email</div>
-                  <input
-                    type="text"
-                    name="email"
-                    placeholder="example@gmail.com"
-                    onChange={handleInputs}
-                  />
+                  <TextField
+                  style={{ width: "230px" }}
+                  label="Email"
+                  variant="outlined"
+                  name="email"
+                  placeholder="example@email.com"
+                  onChange={handleInputs}
+                  color="info"
+                />
                 </div>
                 <div className="registerInputContainer">
-                  <div>Username</div>
-                  <input
-                    type="text"
-                    name="username"
-                    placeholder="example"
-                    onChange={handleInputs}
-                  />
+                  <TextField
+                  style={{ width: "230px" }}
+                  label="Username"
+                  variant="outlined"
+                  name="username"
+                  placeholder="example"
+                  onChange={handleInputs}
+                  color="success"
+                />
                 </div>
                 <div className="registerInputContainer">
-                  <div>Password</div>
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="8+ charaters"
-                    onChange={handleInputs}
-                  />
+                  <TextField
+                  style={{ width: "230px" }}
+                  label="Password"
+                  variant="outlined"
+                  name="password"
+                  placeholder="8+ characters"
+                  onChange={handleInputs}
+                  color="error"
+                  type="password"
+                />
                 </div>
                 <div className="registerInputContainer">
-                  <div>Confirm Password</div>
-                  <input
-                    type="password"
-                    name="confirmPassword"
-                    placeholder="8+ charaters"
-                    onChange={handleInputs}
-                  />
+                  <TextField
+                  style={{ width: "230px" }}
+                  label="Confirm Password"
+                  variant="outlined"
+                  name="confirmPassword"
+                  placeholder="8+ characters"
+                  onChange={handleInputs}
+                  color="warning"
+                  type="password"
+                />
                 </div>
               </div>
               <div className="registerSubmitButtonContainer">

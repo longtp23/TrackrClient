@@ -61,6 +61,7 @@ span {
             background-color: rgb(36, 36, 36);
             min-height: 100px;
             caret-color: white;
+            white-space: pre-line;
         }
         textarea:focus-visible {
             outline: none !important;

@@ -7,7 +7,7 @@ import {
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import { DetailCarousel } from "../../../components/Carousels/detailCarousel/DetailCarousel";
@@ -18,7 +18,7 @@ import { ReviewFormModal } from "../../../components/Modals/reviewFormModal/Revi
 import { ReviewList } from "../../../components/reviewList/ReviewList";
 import { platformIcons } from "../../../utils/platformIcons";
 import { publicRequest, userRequest } from "../../../requests/requestMethods";
-import { toastSettings } from "../../../utils/toastSettings";
+import { toastSettings, useToastError, useToastShow, useToastSuccess } from "../../../utils/toastSettings";
 import { GameCopiesEcommerceDataGrid } from "../../../components/DataGrid/gameCopiesEcommerceDataGrid/GameCopiesEcommerceDataGrid";
 import {
   formatReleaseDate,
@@ -34,7 +34,7 @@ const DetailContainer = styled.div`
 `;
 
 const GameDetail = () => {
-  const location = useLocation();
+  const location = useLocation()
   const slug = location.pathname.split("/")[2];
   const userAuth = useAuthUser();
   const [gameDetail, setGameDetail] = useState();
@@ -55,7 +55,7 @@ const GameDetail = () => {
 
     const gameAdded = gameDetail?._id;
     try {
-      toast.warn("Adding your game to wishlist", { ...toastSettings });
+      useToastShow("Adding your game to wishlist");
       const gameCopy = await publicRequest.post("/gameCopy/search", {
         title: gameDetail.title,
       });
@@ -73,8 +73,8 @@ const GameDetail = () => {
         },
       });
       if (res.data.type === "success")
-        toast.success(res.data.message, { ...toastSettings });
-      else toast.error(res.data.message, { ...toastSettings });
+        useToastSuccess(res.data.message);
+      else useToastError(res.data.message);
     } catch (error) {
       console.log(error);
     }
@@ -87,13 +87,14 @@ const GameDetail = () => {
     const gameImg = gameDetail?.backgroundImage;
     const gameSlug = gameDetail?.slug;
     const gameTitle = gameDetail?.title;
+    useToastShow("Adding game to your collection")
     try {
       const res = await userRequest.put(`/collection/addGame/${userId}`, {
         game: { gameId, gameImg, gameSlug, gameTitle, releaseYear },
       });
       if (res.data.type === "success")
-        toast.success(res.data.message, { ...toastSettings });
-      else toast.error(res.data.message, { ...toastSettings });
+        useToastSuccess(res.data.message);
+      else useToastError(res.data.message);
     } catch (error) {
       console.log(error);
     }

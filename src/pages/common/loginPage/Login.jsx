@@ -2,8 +2,13 @@ import React, { useState } from "react";
 import { useSignIn } from "react-auth-kit";
 import { Link, useNavigate } from "react-router-dom";
 import { publicRequest } from "../../../requests/requestMethods";
-import { useToastError } from "../../../utils/toastSettings";
+import {
+  useToastError,
+  useToastShow,
+  useToastSuccess,
+} from "../../../utils/toastSettings";
 import "./login.scss";
+import { TextField } from "@mui/material";
 
 const Login = () => {
   const [inputs, setInputs] = useState({});
@@ -22,6 +27,7 @@ const Login = () => {
       const res = await publicRequest.post("/auth/login", inputs);
       if (res.data.type === "error") useToastError(res.data.message);
       else {
+        useToastSuccess("Login success!");
         signIn({
           token: res.data.accessToken,
           expiresIn: 3600,
@@ -49,26 +55,39 @@ const Login = () => {
           <div className="left">
             <form onSubmit={handleLogin} className="loginForm">
               <h3>Welcome Back!</h3>
-              <input
-                placeholder="Email"
-                onChange={handleInputs}
-                name="email"
-                type="email"
-              />
-              <input
-                placeholder="Password"
-                onChange={handleInputs}
-                name="password"
-                type="password"
-              />
+              <div className="loginInputWrapper">
+                <TextField
+                  style={{ width: "230px" }}
+                  label="Email"
+                  variant="outlined"
+                  name="email"
+                  placeholder="Your email"
+                  onChange={handleInputs}
+                  color="info"
+                />
+              </div>
+              <div className="loginInputWrapper">
+                <TextField
+                  style={{ width: "230px" }}
+                  label="Password"
+                  variant="outlined"
+                  name="password"
+                  placeholder="Your password"
+                  onChange={handleInputs}
+                  type="password"
+                  color="info"
+                />
+              </div>
               <button onClick={handleLogin}>Login</button>
               <Link to="/register">Dont have an account? Register now</Link>
             </form>
           </div>
           <div className="right">
             <div className="logo">
-              <h1 className="logoLeft">TRACK</h1>
-              <h1 className="logoRight">r</h1>
+              <Link to="/">
+                <h1 className="logoLeft">TRACK</h1>
+                <h1 className="logoRight">r</h1>
+              </Link>
             </div>
             <div className="tagline">
               Navigate Your Gaming Universe with Ease!

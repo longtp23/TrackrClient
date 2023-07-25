@@ -6,19 +6,11 @@
 
         .userInfoInputContainer {
             margin-bottom: 20px;
-            div {
-                color: hsla(0, 0%, 100%, 0.4);
-                font-size: 25px;
+            div{
+                width: 100%;
             }
             input {
                 background-color: black;
-                font-size: 25px;
-                padding: 10px;
-                border-radius: 8px;
-            }
-            input:placeholder-shown {
-                font-style: italic;
-                font-weight: 200;
             }
         }
     }

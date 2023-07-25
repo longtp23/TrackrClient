@@ -1,7 +1,7 @@
 import { ThemeProvider, createTheme } from "@mui/material";
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import { SkeletonTheme } from "react-loading-skeleton";
-import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter,HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
@@ -21,6 +21,7 @@ import UserProfileReviewPage from "./pages/user/userProfileReviewPage/UserProfil
 import UserProfileSettings from "./pages/user/userProfileSettingsPage/UserProfileSettings";
 import UserProfileWishlist from "./pages/user/userProfileWishlistPage/UserProfileWishlist";
 import { ScrollToTop } from "./utils/ScrollToTop";
+import ReviewPage from "./pages/common/reviewPage/ReviewPage";
 
 function App() {
   const PrivateRoute = ({ Component }) => {
@@ -52,6 +53,7 @@ const darkTheme = createTheme({
             <Route exact path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/reviews" element={<ReviewPage />} />
             <Route path="/games" element={<GameList />} />
             <Route path="/game/:slug" element={<GameDetail />} />
             <Route path="/userProfile/:userId/Overview" element={<PrivateRoute Component={UserProfileOverview} />}></Route>

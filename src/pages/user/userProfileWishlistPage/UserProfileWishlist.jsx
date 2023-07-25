@@ -11,6 +11,7 @@ import { formatPrice, formatReleaseYear } from "../../../utils/formatStrings";
 import { toastSettings } from "../../../utils/toastSettings";
 import { toast } from "react-toastify";
 import { WarningModal } from "../../../components/Modals/warningModal/WarningModal";
+import { CircularProgress } from "@mui/material";
 
 const DeleteIcon = () => {
   return <Delete />;
@@ -32,6 +33,7 @@ const UserProfileWishlist = () => {
   const userId = authUser().userId;
   const location = useLocation().pathname.split("/")[3];
   const [wishlist, setWishlist] = useState([]);
+  const [isLoading,setIsLoading] = useState(true)
 
   const pickRandomColor = () => {
     const textColors = ["#ffcd29", "#f24822", "#9747ff"];
@@ -78,6 +80,7 @@ const UserProfileWishlist = () => {
   const getWishlist = async () => {
     const res = await userRequest.get(`/wishlist/${userId}`);
     setWishlist(res.data.games);
+    setIsLoading(false)
   };
   useEffect(() => {
     getWishlist();
@@ -106,76 +109,91 @@ const UserProfileWishlist = () => {
             </div>
           </div>
           <UserProfileMenu location={location} userId={userId} />
-          <div className="wishlistStoreSummaryContainer">
-            Wishlist Summary:
-            <div className="wishlistStoreSummaryContent">
-              <div className="wishlistGameCount">
-                total games:
-                <span style={{ color: "rgb(255, 205, 41)" }}>
-                  {" "}
-                  {wishlist.length}
-                </span>
-              </div>
-              <div className="wishlistTotalValue">
-                value:{" "}
-                <span style={{ color: "#14ae5c" }}>
-                  {formatPrice(totalValue)}
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="wishlistGameList">
-            {wishlist &&
-              wishlist.map((game, index) => (
-                <div key={game._id} className="wishlistGameCardContainer">
-                  <div className="left">
-                    <div className="wishlistGameImgWrapper">
-                      <div className="wishlistActions">
-                        <div>
-                          <WarningModal
-                            InitiateComponent={AddToCollectionIcon}
-                            WarningContent={AddToCollectionContent}
-                            confirmFunction={handleAddGameToCollection}
-                            parameters={{
-                              gameId: game.gameId,
-                              gameSlug: game.gameSlug,
-                              gameImg: game.gameImg,
-                              gameTitle: game.gameTitle,
-                            }}
-                          />
-                        </div>
-                        <div>
-                          <WarningModal
-                            InitiateComponent={DeleteIcon}
-                            WarningContent={WarningDeleteContent}
-                            confirmFunction={handleDeleteGameFromWishlist}
-                            parameters={game.gameId}
-                          />
-                        </div>
-                      </div>
-                      <img src={resize200(game.gameImg)} />
-                    </div>
-                    <span style={{ cursor: "pointer" }}>
-                      <Link target="_blank" to={`/game/${game.gameSlug}`}>
-                        {game.gameTitle}
-                      </Link>
+          {!isLoading ? (
+            <div>
+              <div className="wishlistStoreSummaryContainer">
+                Wishlist Summary:
+                <div className="wishlistStoreSummaryContent">
+                  <div className="wishlistGameCount">
+                    total games:
+                    <span style={{ color: "rgb(255, 205, 41)" }}>
+                      {" "}
+                      {wishlist.length}
                     </span>
                   </div>
-                  <div className="right">
-                    <div className="wishlistBestPrice">
-                      Best price at{" "}
-                      <b style={{ color: "#14ae5c" }}>
-                        ${formatPrice(game.lowestPriceAdded)}
-                      </b>{" "}
-                      on{" "}
-                      <b style={{ color: pickRandomColor() }}>
-                        {game.storeAdded}
-                      </b>
-                    </div>
+                  <div className="wishlistTotalValue">
+                    value:{" "}
+                    <span style={{ color: "#14ae5c" }}>
+                      {formatPrice(totalValue)}
+                    </span>
                   </div>
                 </div>
-              ))}
-          </div>
+              </div>
+              <div className="wishlistGameList">
+                {wishlist &&
+                  wishlist.map((game, index) => (
+                    <div key={game._id} className="wishlistGameCardContainer">
+                      <div className="left">
+                        <div className="wishlistGameImgWrapper">
+                          <div className="wishlistActions">
+                            <div>
+                              <WarningModal
+                                InitiateComponent={AddToCollectionIcon}
+                                WarningContent={AddToCollectionContent}
+                                confirmFunction={handleAddGameToCollection}
+                                parameters={{
+                                  gameId: game.gameId,
+                                  gameSlug: game.gameSlug,
+                                  gameImg: game.gameImg,
+                                  gameTitle: game.gameTitle,
+                                }}
+                              />
+                            </div>
+                            <div>
+                              <WarningModal
+                                InitiateComponent={DeleteIcon}
+                                WarningContent={WarningDeleteContent}
+                                confirmFunction={handleDeleteGameFromWishlist}
+                                parameters={game.gameId}
+                              />
+                            </div>
+                          </div>
+                          <img src={resize200(game.gameImg)} />
+                        </div>
+                        <span style={{ cursor: "pointer" }}>
+                          <Link target="_blank" to={`/game/${game.gameSlug}`}>
+                            {game.gameTitle}
+                          </Link>
+                        </span>
+                      </div>
+                      <div className="right">
+                        <div className="wishlistBestPrice">
+                          Best price at{" "}
+                          <b style={{ color: "#14ae5c" }}>
+                            ${formatPrice(game.lowestPriceAdded)}
+                          </b>{" "}
+                          on{" "}
+                          <b style={{ color: pickRandomColor() }}>
+                            {game.storeAdded}
+                          </b>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: "30vh",
+              }}
+            >
+              <CircularProgress />
+            </div>
+          )}
         </div>
       </div>
     </div>

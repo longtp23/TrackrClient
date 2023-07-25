@@ -1,10 +1,8 @@
 .gameListContainer {
-    // display: flex;
-    // flex-wrap: wrap;
     display: grid;
-    grid-template-columns: 316px 316px 316px 316px;
+    grid-template-columns: 25% 25% 25% 25%;
     grid-template-rows: auto;
-    gap: 35px;
+    row-gap: 35px;
     flex: 4;
     padding: 20px;
     min-height: 92vh;

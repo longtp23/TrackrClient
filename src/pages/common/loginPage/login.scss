@@ -28,12 +28,9 @@
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
                 }
-                input {
-                    margin: 10px;
-                    background-color: #121212;
-                    padding: 10px;
-                    width: 260px;
-                    border-radius: 5px;
+                .loginInputWrapper {
+                    background-color: black;
+                    margin-bottom: 8px;
                 }
                 button {
                     background-color: #22c1c3;
@@ -42,7 +39,7 @@
                     margin-top: 20px;
                     transition: all ease 0.2s;
                 }
-                button:hover{
+                button:hover {
                     transform: scale(1.1);
                 }
                 a {
@@ -65,16 +62,18 @@
                 font-size: 40px;
             }
             .logo {
-                display: flex;
-                .logoLeft {
-                    font-weight: 900;
-                    letter-spacing: 5px;
-                    color: yellow;
-                }
-                .logoRight {
-                    font-weight: 900;
-                    letter-spacing: 5px;
-                    color: red;
+                a {
+                    display: flex;
+                    .logoLeft {
+                        font-weight: 900;
+                        letter-spacing: 5px;
+                        color: yellow;
+                    }
+                    .logoRight {
+                        font-weight: 900;
+                        letter-spacing: 5px;
+                        color: red;
+                    }
                 }
             }
             .tagline {

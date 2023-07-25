@@ -3,7 +3,7 @@
     width: 316px;
     height: 420px;
     background-color: #202020;
-    border-radius: 5px;
+    border-radius: 15px;
     
     cursor: pointer;
     transition: all ease 0.5s;
@@ -12,6 +12,7 @@
             width: 300px;
             object-fit: cover;
             height: 200px;
+            border-radius: 10px;
         }
     }
     .gameItemInfo {

@@ -1,19 +1,23 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useState } from "react";
-import "./reviewFormModal.scss";
 import {
   EditOutlined,
   ThumbDownAlt,
   ThumbUpAlt,
   ThumbsUpDown,
 } from "@mui/icons-material";
+import { Fragment, useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
-import { publicRequest, userRequest } from "../../../requests/requestMethods";
-import { ToggleButtonGroup } from "@mui/material";
-import ToggleButton from "react-bootstrap/esm/ToggleButton";
 import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
+import ToggleButton from "react-bootstrap/esm/ToggleButton";
 import { toast } from "react-toastify";
-import { toastSettings } from "../../../utils/toastSettings";
+import { publicRequest, userRequest } from "../../../requests/requestMethods";
+import {
+  toastSettings,
+  useToastError,
+  useToastShow,
+  useToastSuccess,
+} from "../../../utils/toastSettings";
+import "./reviewFormModal.scss";
 
 export const ReviewFormModal = ({ gameId, updateReview }) => {
   let [isOpen, setIsOpen] = useState(false);
@@ -40,20 +44,21 @@ export const ReviewFormModal = ({ gameId, updateReview }) => {
     e.preventDefault();
 
     if (!gameId || !ratingValue || !inputs.reviewContent || !inputs.storeName) {
-      toast.error("Invalid submission", { ...toastSettings });
+      useToastError("Invalid Submission!");
+    } else {
+    useToastShow("Sending Review!")
+      const res = await userRequest.post(`/review/${authUser().userId}`, {
+        gameId,
+        rating: ratingValue,
+        username: authUser().username,
+        storeName: inputs.storeName,
+        reviewContent: inputs.reviewContent,
+      });
+
+      useToastSuccess(res.data.message);
+      closeModal();
+      updateReview();
     }
-
-    const res = await userRequest.post(`/review/${authUser().userId}`, {
-      gameId,
-      rating: ratingValue,
-      username: authUser().username,
-      storeName: inputs.storeName,
-      reviewContent: inputs.reviewContent,
-    });
-
-    toast.success(res.data.message, { ...toastSettings });
-    closeModal();
-    updateReview();
   };
 
   useEffect(() => {
@@ -71,7 +76,6 @@ export const ReviewFormModal = ({ gameId, updateReview }) => {
   const openModal = () => {
     setIsOpen(true);
   };
-
   return (
     <>
       <div className="">
@@ -119,7 +123,7 @@ export const ReviewFormModal = ({ gameId, updateReview }) => {
                     others.
                   </span>
 
-                <form className="reviewForm" method="dialog">
+                  <form className="reviewForm" method="dialog">
                     <div className="left">
                       <img
                         className="reviewProfilePic"
