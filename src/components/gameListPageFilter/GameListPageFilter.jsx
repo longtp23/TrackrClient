@@ -3,34 +3,42 @@ import "./gameListPageFilter.scss";
 import { formatPrice } from "../../utils/formatStrings";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
+import { useLocation, useNavigate } from "react-router-dom";
+import { gameGenres } from "../../utils/gameGenres";
 
 export const GameListPageFilter = ({ filters }) => {
   const [price, setPrice] = useState("");
   const [platform, setPlatform] = useState([]);
   const [genres, setGenres] = useState([]);
+  const location = useLocation();
+  const [searchQuery, setSearchQuery] = useState(location.state?.searchQuery);
   const handleGenreChange = (genre) => setGenres(genre);
   const handlePlatformChange = (platform) => setPlatform(platform);
   const handlePriceChange = (price) => setPrice(price);
-  // console.log(genres);
-  // console.log(platform);
-  // console.log(price);
-  useEffect(() => {
-    filters({ price, platforms: platform, genres });
-  }, [price, platform, genres]);
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    setSearchQuery(location.state?.searchQuery);
+  }, [location.state?.searchQuery]);
+  useEffect(() => {
+    filters({ price, platforms: platform, genres, searchQuery });
+  }, [price, platform, genres, searchQuery]);
   const clearFilter = () => {
     setGenres(undefined);
     setPlatform(undefined);
     setPrice(undefined);
-    window.scrollTo(0,0)
+    setSearchQuery(undefined);
+    navigate("/games", {
+      state: { ...location.state, searchQuery: undefined },
+    });
+    window.scrollTo(0, 0);
   };
 
   const submitFilter = () => {
     filters({ price, platforms: platform, genres });
   };
 
-
-  const handleScrollTop = ()=>window.scrollTo(0,0)
+  const handleScrollTop = () => window.scrollTo(0, 0);
 
   return (
     <div className="gameListPageFilterContainer">
@@ -74,7 +82,7 @@ export const GameListPageFilter = ({ filters }) => {
               value="over1M4"
               onChange={(e) => handlePriceChange(e.target.value)}
             />
-           Over {formatPrice(1400000)}
+            Over {formatPrice(1400000)}
           </label>
         </div>
       </div>
@@ -107,25 +115,11 @@ export const GameListPageFilter = ({ filters }) => {
           className="genresToggleBtnGr"
           onClick={handleScrollTop}
         >
-          <ToggleButton id="tbg-btn-1" value="Action">
-            Action
-          </ToggleButton>
-
-          <ToggleButton id="tbg-btn-2" value="Adventure">
-            Adventure
-          </ToggleButton>
-          <ToggleButton id="tbg-btn-3" value="RPG">
-            RPG
-          </ToggleButton>
-          <ToggleButton id="tbg-btn-4" value="Shooter">
-            Shooter
-          </ToggleButton>
-          <ToggleButton id="tbg-btn-5" value="Indie">
-            Indie
-          </ToggleButton>
-          <ToggleButton id="tbg-btn-6" value="Horror">
-            Horror
-          </ToggleButton>
+          {gameGenres.map((genre, index) => (
+            <ToggleButton key={index} id={`tbg-btn-${index + 1}`} value={genre}>
+              {genre}
+            </ToggleButton>
+          ))}
         </ToggleButtonGroup>
       </div>
       <div className="btnWrapper">

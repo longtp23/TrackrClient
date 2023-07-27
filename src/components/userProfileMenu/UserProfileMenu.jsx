@@ -12,10 +12,10 @@ export const UserProfileMenu = ({ location, userId }) => {
   return (
     <div className="userProfileMenu">
       {userProfileMenuItems.map((userProfileMenuItem, index) => (
-        <Link key={index} to={`/userProfile/${userId}/${userProfileMenuItem}`}>
+        <Link key={index} to={`/userProfile/${location[2]}/${userProfileMenuItem}`}>
           <div
             className={
-              location === userProfileMenuItem
+              location[3] === userProfileMenuItem
                 ? "userProfileMenuItem selected"
                 : "userProfileMenuItem"
             }

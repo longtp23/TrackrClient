@@ -11,7 +11,7 @@ import {
 } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import { useAuthUser, useSignOut } from "react-auth-kit";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { userRequest } from "../../../requests/requestMethods";
 import { formatPrice, formatTimePosted } from "../../../utils/formatStrings";
 
@@ -24,6 +24,7 @@ export const Navbar = () => {
   const authUser = useAuthUser();
   const userId = authUser()?.userId;
   const isAuthenticated = authUser();
+  const location = useLocation();
 
   const pickRandomColor = () => {
     const textColors = ["#ffcd29", "#f24822", "#9747ff"];
@@ -50,7 +51,6 @@ export const Navbar = () => {
       },
     });
   };
-
   const handleKey = (e) => {
     if (e.key === "Enter") {
       handleSearch(e);

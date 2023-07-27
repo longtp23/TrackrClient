@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { publicRequest } from "../../../requests/requestMethods";
 import { formatPrice } from "../../../utils/formatStrings";
-import { PricingModal } from "../../Modals/pricingModal/PricingModal"
-import { ArrowBackIosNew, ArrowForwardIos, DoNotTouch, SentimentVeryDissatisfied } from "@mui/icons-material";
+import { PricingModal } from "../../Modals/pricingModal/PricingModal";
+import {
+  ArrowBackIosNew,
+  ArrowForwardIos,
+  DoNotTouch,
+  SentimentVeryDissatisfied,
+} from "@mui/icons-material";
 import { useAuthUser } from "react-auth-kit";
 import { WarningModal } from "../../Modals/warningModal/WarningModal";
 import { useToastError, useToastSuccess } from "../../../utils/toastSettings";
-
+import { CircularProgress } from "@mui/material";
 
 const DisableButton = () => {
   return (
@@ -25,23 +30,29 @@ const WarningContent = () => {
 
 export const GameCopiesEcommerceDataGrid = ({ title }) => {
   const [gameCopies, setGameCopies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const authUser = useAuthUser();
   const isAdmin = authUser()?.isAdmin;
 
   const getGameCopies = async () => {
-    try {
-      const response = await publicRequest.post(
-        `/gameCopy/search?gameCopiesPerPage=15&page=${page}`,
-        {
-          title: title,
-          storeName: "Lazada",
-        }
-      );
-      setGameCopies(response.data);
-    } catch (error) {
-      console.log(error);
-    }
+    setIsLoading(true);
+    if(title){
+
+      try {
+        const response = await publicRequest.post(
+          `/gameCopy/search?gameCopiesPerPage=15&page=${page}`,
+          {
+            title: title,
+            storeName: "Lazada",
+          }
+        );
+        setGameCopies(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    }else return setIsLoading(false)
   };
 
   const handleNextPagination = () => {
@@ -74,86 +85,103 @@ export const GameCopiesEcommerceDataGrid = ({ title }) => {
   };
   return (
     <div>
-      {gameCopies.length !== 0 ? (
+      {!isLoading ? (
         <div>
-          <table>
-            <thead>
-              <tr>
-                <th style={{ textAlign: "center", width: "750px" }}>Title</th>
-                <th>Current Price</th>
-                <th style={{ textAlign: "center" }}>View Pricing</th>
-                {isAdmin && <th className="actionTable">Disable</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {gameCopies &&
-                gameCopies.map((gameCopy) => (
-                  <tr key={gameCopy._id}>
-                    <td
-                      style={{
-                        color: pickRandomColor(),
-                        fontWeight: "bold",
-                        textOverflow: "ellipsis",
-                        overflow: "hidden",
-                        whiteSpace: "nowrap",
-                        maxWidth: "750px",
-                      }}
-                    >
-                      <a href={gameCopy.link} target="_blank">
-                        {gameCopy.title}
-                      </a>
-                    </td>
-                    <td>{formatPrice(gameCopy.retailPrice[0].price)}</td>
-                    <td style={{ textAlign: "center" }}>
-                      <PricingModal priceData={gameCopy.retailPrice} />
-                    </td>
-                    {isAdmin && (
-                    <td style={{ textAlign: "center" }}>
-                      <WarningModal
-                        InitiateComponent={DisableButton}
-                        WarningContent={WarningContent}
-                        confirmFunction={handleDisableCopy}
-                        parameters={gameCopy._id}
-                      />
-                    </td>
-                  )}
+          {gameCopies.length !== 0 ? (
+            <div>
+              <table>
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: "center", width: "750px" }}>
+                      Title
+                    </th>
+                    <th>Current Price</th>
+                    <th style={{ textAlign: "center" }}>View Pricing</th>
+                    {isAdmin && <th className="actionTable">Disable</th>}
                   </tr>
-                ))}
-            </tbody>
-          </table>
-          <div className="pagination">
-            <button
-              disabled={page === 1}
-              className="paginationButton"
-              onClick={handlePrevPagination}
+                </thead>
+                <tbody>
+                  {gameCopies &&
+                    gameCopies.map((gameCopy) => (
+                      <tr key={gameCopy._id}>
+                        <td
+                          style={{
+                            color: pickRandomColor(),
+                            fontWeight: "bold",
+                            textOverflow: "ellipsis",
+                            overflow: "hidden",
+                            whiteSpace: "nowrap",
+                            maxWidth: "750px",
+                          }}
+                        >
+                          <a href={gameCopy.link} target="_blank">
+                            {gameCopy.title}
+                          </a>
+                        </td>
+                        <td>{formatPrice(gameCopy.retailPrice[0].price)}</td>
+                        <td style={{ textAlign: "center" }}>
+                          <PricingModal priceData={gameCopy.retailPrice} />
+                        </td>
+                        {isAdmin && (
+                          <td style={{ textAlign: "center" }}>
+                            <WarningModal
+                              InitiateComponent={DisableButton}
+                              WarningContent={WarningContent}
+                              confirmFunction={handleDisableCopy}
+                              parameters={gameCopy._id}
+                            />
+                          </td>
+                        )}
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+              <div className="pagination">
+                <button
+                  disabled={page === 1}
+                  className="paginationButton"
+                  onClick={handlePrevPagination}
+                >
+                  <ArrowBackIosNew />
+                </button>
+                <div className="w-9 text-center">{page}</div>
+                <button
+                  disabled={gameCopies?.length < 15}
+                  className="paginationButton"
+                  onClick={handleNextPagination}
+                >
+                  <ArrowForwardIos />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                fontSize: "50px",
+                padding: "20px 0px",
+              }}
             >
-              <ArrowBackIosNew />
-            </button>
-            <div className="w-9 text-center">{page}</div>
-            <button
-              disabled={gameCopies?.length < 15}
-              className="paginationButton"
-              onClick={handleNextPagination}
-            >
-              <ArrowForwardIos />
-            </button>
-          </div>
+              <div>
+                <SentimentVeryDissatisfied style={{ fontSize: "80px" }} />
+              </div>
+              <h3>No games here!</h3>
+            </div>
+          )}
         </div>
       ) : (
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            fontSize: "50px",
-            padding: "20px 0px",
+            minHeight: "30vh",
           }}
         >
-          <div>
-            <SentimentVeryDissatisfied style={{ fontSize: "80px" }} />
-          </div>
-          <h3>No games here!</h3>
+          <CircularProgress />
         </div>
       )}
     </div>

@@ -1,0 +1,20 @@
+export const gameGenres = [
+  "Action",
+  "Adventure",
+  "RPG",
+  "Shooter",
+  "Strategy",
+  "Simulation",
+  "Sports",
+  "Racing",
+  "Horror",
+  "Puzzle",
+  "Platformer",
+  "Fighting",
+  "Casual",
+  "Arcade",
+  "Card",
+  "Massively Multiplayer",
+  "Family",
+  "Board Games"
+];

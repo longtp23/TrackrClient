@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { Save, WarningAmber } from "@mui/icons-material";
 import "./confirmPasswordModal.scss";
-import { toastSettings } from "../../../utils/toastSettings";
+import { toastSettings, useToastError, useToastShow } from "../../../utils/toastSettings";
 import { toast } from "react-toastify";
 import { userRequest } from "../../../requests/requestMethods";
 import { useAuthUser } from "react-auth-kit";
@@ -22,15 +22,16 @@ export const ConfirmPasswordModal = ({ userInfo }) => {
     setIsOpen(true);
   }
 
+
   const handleConfirmPassword = async () => {
     if (
       inputs.password !== inputs.confirmPassword ||
       !inputs.password ||
       !inputs.confirmPassword
     ) {
-      toast.error("Password not valid!", { ...toastSettings });
+      useToastError("Password not valid!");
     } else {
-      toast.warning("Updating Info!", { ...toastSettings });
+      useToastShow("Updating Info!");
       const confirmPassword = await userRequest.post(
         `/auth/checkPassword/${userId}`,
         {
@@ -138,7 +139,7 @@ export const ConfirmPasswordModal = ({ userInfo }) => {
                           style={{ width: "230px" }}
                           label="Confirm Password"
                           variant="outlined"
-                          name="comfirmPassword"
+                          name="confirmPassword"
                           type="password"
                           placeholder="Confirm Password"
                           onChange={handleInputChange}

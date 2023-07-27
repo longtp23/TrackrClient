@@ -15,6 +15,7 @@ import { PricingModal } from "../../Modals/pricingModal/PricingModal";
 import styled, { css, keyframes } from "styled-components";
 import { WarningModal } from "../../Modals/warningModal/WarningModal";
 import { useToastError, useToastSuccess } from "../../../utils/toastSettings";
+import { CircularProgress } from "@mui/material";
 
 const neonAnimation = keyframes`
   from {
@@ -59,23 +60,28 @@ const WarningContent = () => {
 
 export const GameCopiesDataGridRaw = ({ title }) => {
   const [gameCopies, setGameCopies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [triggerState, setTriggerState] = useState(false);
   const authUser = useAuthUser();
   const isAdmin = authUser()?.isAdmin;
 
   const getGameCopies = async () => {
-    try {
-      const response = await publicRequest.post(
-        `/gameCopy/search?gameCopiesPerPage=15&page=${page}`,
-        {
-          title: title,
-        }
-      );
-      setGameCopies(response.data);
-    } catch (error) {
-      console.log(error);
-    }
+    setIsLoading(true);
+    if(title){
+      try {
+        const response = await publicRequest.post(
+          `/gameCopy/search?gameCopiesPerPage=15&page=${page}`,
+          {
+            title: title,
+          }
+        );
+        setGameCopies(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    }else return setIsLoading(false)
   };
 
   const handleNextPagination = () => {
@@ -161,146 +167,168 @@ export const GameCopiesDataGridRaw = ({ title }) => {
 
   return (
     <div>
-      {gameCopies.length !== 0 ? (
+      {!isLoading ? (
         <div>
-          <table>
-            <thead>
-              <tr>
-                <th className="storeTable">Store</th>
-                <th className="platformTable">Platform</th>
-                <th className="conditionTable">Condition</th>
-                {!isAdmin ? (
-                  <th style={{ textAlign: "center", width: "250px" }}>
-                    Edition
-                  </th>
-                ) : (
-                  <th>Full title</th>
-                )}
-                <th>Current Price</th>
-                <th>Original Price</th>
-                <th className="actionTable">View Pricing</th>
-                {isAdmin && <th className="actionTable">Disable</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {gameCopies.map((gameCopy) => (
-                <tr key={gameCopy._id}>
-                  <td>
-                    <a
-                      target="_blank"
-                      href={gameCopy.link}
-                      style={{
-                        color: pickRandomColor(),
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {gameCopy.storeName}
-                    </a>
-                  </td>
-                  <td>{renderPlatformImg(gameCopy.platform)} </td>
-                  <td
-                    style={{
-                      color:
-                        gameCopy.platform === "ps5Old" ||
-                        gameCopy.platform === "ps4Old" ||
-                        gameCopy.platform === "switchOld"
-                          ? "#ffcd29"
-                          : "#14ae5c",
-                      fontWeight: "bold",
-                      textAlign: "center",
-                    }}
-                  >
-                    <a href={gameCopy.link} target="_blank">
-                      {gameCopy.platform === "ps5Old" ||
-                      gameCopy.platform === "ps4Old" ||
-                      gameCopy.platform === "switchOld"
-                        ? "Used"
-                        : "New"}{" "}
-                    </a>
-                  </td>
+          {gameCopies.length !== 0 ? (
+            <div>
+              <table>
+                <thead>
+                  <tr>
+                    <th className="storeTable">Store</th>
+                    <th className="platformTable">Platform</th>
+                    <th className="conditionTable">Condition</th>
+                    {!isAdmin ? (
+                      <th style={{ textAlign: "center", width: "250px" }}>
+                        Edition
+                      </th>
+                    ) : (
+                      <th>Full title</th>
+                    )}
+                    <th>Current Price</th>
+                    <th>Original Price</th>
+                    <th className="actionTable">View Pricing</th>
+                    {isAdmin && <th className="actionTable">Disable</th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  {gameCopies.map((gameCopy) => (
+                    <tr key={gameCopy._id}>
+                      <td>
+                        <a
+                          target="_blank"
+                          href={gameCopy.link}
+                          style={{
+                            color: pickRandomColor(),
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {gameCopy.storeName}
+                        </a>
+                      </td>
+                      <td>{renderPlatformImg(gameCopy.platform)} </td>
+                      <td
+                        style={{
+                          color:
+                            gameCopy.platform === "ps5Old" ||
+                            gameCopy.platform === "ps4Old" ||
+                            gameCopy.platform === "switchOld"
+                              ? "#ffcd29"
+                              : "#14ae5c",
+                          fontWeight: "bold",
+                          textAlign: "center",
+                        }}
+                      >
+                        <a href={gameCopy.link} target="_blank">
+                          {gameCopy.platform === "ps5Old" ||
+                          gameCopy.platform === "ps4Old" ||
+                          gameCopy.platform === "switchOld"
+                            ? "Used"
+                            : "New"}{" "}
+                        </a>
+                      </td>
 
-                  {!isAdmin ? (
-                    <EditionText
-                      edition={extractEdition(title, gameCopy.title)}
-                    >
-                      <a href={gameCopy.link} target="_blank">
-                        {extractEdition(title, gameCopy.title)}
-                      </a>
-                    </EditionText>
-                  ) : (
-                    <td>
-                      <div style={{ color: pickRandomColor(), fontWeight:"bold" }}>
-                        <a href={gameCopy.link} target="_blank">{gameCopy.title}</a>
-                      </div>
-                    </td>
-                  )}
-
-                  <td>
-                    <a target="_blank" href={gameCopy.link}>
-                      {formatPrice(gameCopy.retailPrice[0].price)}
-                    </a>
-                  </td>
-                  <td>
-                    <a target="_blank" href={gameCopy.link}>
-                      {formatPrice(
-                        !gameCopy.originalPrice
-                          ? gameCopy.retailPrice[
-                              gameCopy.retailPrice.length - 1
-                            ].price
-                          : gameCopy.originalPrice
+                      {!isAdmin ? (
+                        <EditionText
+                          edition={extractEdition(title, gameCopy.title)}
+                        >
+                          <a href={gameCopy.link} target="_blank">
+                            {extractEdition(title, gameCopy.title)}
+                          </a>
+                        </EditionText>
+                      ) : (
+                        <td>
+                          <div
+                            style={{
+                              color: pickRandomColor(),
+                              fontWeight: "bold",
+                            }}
+                          >
+                            <a href={gameCopy.link} target="_blank">
+                              {gameCopy.title}
+                            </a>
+                          </div>
+                        </td>
                       )}
-                    </a>
-                  </td>
-                  <td style={{ textAlign: "center" }}>
-                    <PricingModal priceData={gameCopy.retailPrice} />
-                  </td>
-                  {isAdmin && (
-                    <td style={{ textAlign: "center" }}>
-                      <WarningModal
-                        InitiateComponent={DisableButton}
-                        WarningContent={WarningContent}
-                        confirmFunction={handleDisableCopy}
-                        parameters={gameCopy._id}
-                      />
-                    </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="pagination">
-            <button
-              disabled={page === 1}
-              className="paginationButton"
-              onClick={handlePrevPagination}
+
+                      <td>
+                        <a target="_blank" href={gameCopy.link}>
+                          {formatPrice(gameCopy.retailPrice[0].price)}
+                        </a>
+                      </td>
+                      <td>
+                        <a target="_blank" href={gameCopy.link}>
+                          {formatPrice(
+                            !gameCopy.originalPrice
+                              ? gameCopy.retailPrice[
+                                  gameCopy.retailPrice.length - 1
+                                ].price
+                              : gameCopy.originalPrice
+                          )}
+                        </a>
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        <PricingModal priceData={gameCopy.retailPrice} />
+                      </td>
+                      {isAdmin && (
+                        <td style={{ textAlign: "center" }}>
+                          <WarningModal
+                            InitiateComponent={DisableButton}
+                            WarningContent={WarningContent}
+                            confirmFunction={handleDisableCopy}
+                            parameters={gameCopy._id}
+                          />
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="pagination">
+                <button
+                  disabled={page === 1}
+                  className="paginationButton"
+                  onClick={handlePrevPagination}
+                >
+                  <ArrowBackIosNew />
+                </button>
+                <div className="w-9 text-center">{page}</div>
+                <button
+                  disabled={gameCopies?.length < 15}
+                  className="paginationButton"
+                  onClick={handleNextPagination}
+                >
+                  <ArrowForwardIos />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                fontSize: "50px",
+                padding: "20px 0px",
+              }}
             >
-              <ArrowBackIosNew />
-            </button>
-            <div className="w-9 text-center">{page}</div>
-            <button
-              disabled={gameCopies?.length < 15}
-              className="paginationButton"
-              onClick={handleNextPagination}
-            >
-              <ArrowForwardIos />
-            </button>
-          </div>
+              <div>
+                <SentimentVeryDissatisfied style={{ fontSize: "80px" }} />
+              </div>
+              <h3>No games here!</h3>
+            </div>
+          )}
         </div>
       ) : (
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            fontSize: "50px",
-            padding: "20px 0px",
+            minHeight: "30vh",
           }}
         >
-          <div>
-            <SentimentVeryDissatisfied style={{ fontSize: "80px" }} />
-          </div>
-          <h3>No games here!</h3>
+          <CircularProgress />
         </div>
       )}
     </div>

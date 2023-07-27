@@ -9,6 +9,7 @@ import {
 } from "../../../utils/toastSettings";
 import "./login.scss";
 import { TextField } from "@mui/material";
+import { validateEmail } from "../../../utils/formatStrings";
 
 const Login = () => {
   const [inputs, setInputs] = useState({});
@@ -21,8 +22,18 @@ const Login = () => {
     });
   };
 
+  const handleValidate = () => {
+    if (!inputs.email || !inputs.password)
+      return useToastError("Invalid Credentials!");
+
+    validateEmail(inputs.email);
+
+    return true;
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
+    if(handleValidate())
     try {
       const res = await publicRequest.post("/auth/login", inputs);
       if (res.data.type === "error") useToastError(res.data.message);

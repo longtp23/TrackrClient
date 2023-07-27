@@ -1,7 +1,13 @@
 import { ThemeProvider, createTheme } from "@mui/material";
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import { SkeletonTheme } from "react-loading-skeleton";
-import { BrowserRouter,HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  HashRouter,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
@@ -28,19 +34,20 @@ function App() {
     const isAuthenticated = useIsAuthenticated();
     const auth = isAuthenticated();
     return auth ? <Component /> : <Navigate to="/login" />;
-};
+  };
 
-const AdminRoute = ({Component}) => {
-  const authUser = useAuthUser();
-  const isAdmin = authUser().isAdmin;
-  return isAdmin ? <Component/> : <Navigate to="/"/>
-}
+  const AdminRoute = ({ Component }) => {
+    const isAuthenticated = useIsAuthenticated();
+    const authUser = useAuthUser();
+    const isAdmin = authUser()?.isAdmin;
+    return isAdmin && isAuthenticated() ? <Component /> : <Navigate to="/" />;
+  };
 
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
+  const darkTheme = createTheme({
+    palette: {
+      mode: "dark",
+    },
+  });
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -48,7 +55,7 @@ const darkTheme = createTheme({
         {/* <CssBaseline/> */}
         <ToastContainer />
         <HashRouter>
-        <ScrollToTop/>
+          <ScrollToTop />
           <Routes>
             <Route exact path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -56,16 +63,46 @@ const darkTheme = createTheme({
             <Route path="/reviews" element={<ReviewPage />} />
             <Route path="/games" element={<GameList />} />
             <Route path="/game/:slug" element={<GameDetail />} />
-            <Route path="/userProfile/:userId/Overview" element={<PrivateRoute Component={UserProfileOverview} />}></Route>
-            <Route path="/userProfile/:userId/Wishlist" element={<PrivateRoute Component={UserProfileWishlist} />}></Route>
-            <Route path="/userProfile/:userId/Collection" element={<PrivateRoute Component={UserProfileCollection} />}></Route>
-            <Route path="/userProfile/:userId/Reviews" element={<PrivateRoute Component={UserProfileReviewPage} />}></Route>
-            <Route path="/userProfile/:userId/Settings" element={<PrivateRoute Component={UserProfileSettings} />}></Route>
-            <Route path="/admin" element={<AdminRoute Component={AdminDashboard} />}></Route>
-            <Route path="/admin/gameCopies" element={<AdminRoute Component={AdminManageGameCopies} />}></Route>
-            <Route path="/admin/users" element={<AdminRoute Component={AdminManageUsers} />}></Route>
-            <Route path="/admin/games" element={<AdminRoute Component={AdminManageGames} />}></Route>
-            <Route path="/admin/addGame" element={<AdminRoute Component={AdminAddGame} />}></Route>
+            <Route
+              path="/userProfile/:userId/Overview"
+              element={<PrivateRoute Component={UserProfileOverview} />}
+            ></Route>
+            <Route
+              path="/userProfile/:userId/Wishlist"
+              element={<PrivateRoute Component={UserProfileWishlist} />}
+            ></Route>
+            <Route
+              path="/userProfile/:userId/Collection"
+              element={<PrivateRoute Component={UserProfileCollection} />}
+            ></Route>
+            <Route
+              path="/userProfile/:userId/Reviews"
+              element={<PrivateRoute Component={UserProfileReviewPage} />}
+            ></Route>
+            <Route
+              path="/userProfile/:userId/Settings"
+              element={<PrivateRoute Component={UserProfileSettings} />}
+            ></Route>
+            <Route
+              path="/admin"
+              element={<AdminRoute Component={AdminDashboard} />}
+            ></Route>
+            <Route
+              path="/admin/gameCopies"
+              element={<AdminRoute Component={AdminManageGameCopies} />}
+            ></Route>
+            <Route
+              path="/admin/users"
+              element={<AdminRoute Component={AdminManageUsers} />}
+            ></Route>
+            <Route
+              path="/admin/games"
+              element={<AdminRoute Component={AdminManageGames} />}
+            ></Route>
+            <Route
+              path="/admin/addGame"
+              element={<AdminRoute Component={AdminAddGame} />}
+            ></Route>
           </Routes>
         </HashRouter>
       </SkeletonTheme>

@@ -11,8 +11,8 @@ import "./userProfileSettings.scss";
 
 const UserProfileSettings = () => {
   const authUser = useAuthUser();
-  const userId = authUser().userId;
-  const location = useLocation().pathname.split("/")[3];
+  const location = useLocation().pathname.split("/");
+  const userId = location[2];
   const [userInfo, setUserInfo] = useState({});
   useEffect(() => {
     const getUserInfo = async () => {

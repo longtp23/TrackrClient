@@ -1,7 +1,14 @@
 import { Album, Games, Person, RateReview } from "@mui/icons-material";
 import "./adminDashboardBlock.scss";
+import { CircularProgress } from "@mui/material";
 
-export const AdminDashboardBlock = ({ colSpan, title, color, number }) => {
+export const AdminDashboardBlock = ({
+  colSpan,
+  title,
+  color,
+  number,
+  isLoading,
+}) => {
   return (
     <div
       style={{ columnSpan: colSpan, borderColor: color }}
@@ -19,7 +26,23 @@ export const AdminDashboardBlock = ({ colSpan, title, color, number }) => {
         <div />
       )}
       <h2>{title}:</h2>
-      <span style={{ color: color }}>{number}</span>
+      {!isLoading ? (
+        <span style={{ color: color }}>{number}</span>
+      ) : (
+        <CircularProgress
+          color={
+            title === "Games"
+              ? "success"
+              : title === "Copies"
+              ? "error"
+              : title === "Users"
+              ? "warning"
+              : title === "Reviews"
+              ? "secondary"
+              : "info"
+          }
+        />
+      )}
     </div>
   );
 };

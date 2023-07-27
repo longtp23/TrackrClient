@@ -9,6 +9,7 @@ import { UserEachMonthChart } from "../../../components/Charts/userEachMonthChar
 const AdminDashboard = () => {
   const authUser = useAuthUser();
   const [numbers, setNumbers] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const getUsers = async () => {
       const users = await publicRequest.get("/user/getUsersNumbers");
@@ -40,6 +41,8 @@ const AdminDashboard = () => {
       });
     };
     getReviews();
+
+    setIsLoading(false);
   }, []);
   return (
     <div className="adminDashboardContainer">
@@ -54,24 +57,28 @@ const AdminDashboard = () => {
               title={"Games"}
               color={"#14ae5c"}
               number={numbers?.games}
+              isLoading={isLoading}
             />
             <AdminDashboardBlock
               colSpan={1}
               title={"Copies"}
               color={"#f24822"}
               number={numbers?.gameCopies}
+              isLoading={isLoading}
             />
             <AdminDashboardBlock
               colSpan={1}
               title={"Users"}
               color={"#ffcd29"}
               number={numbers?.users}
+              isLoading={isLoading}
             />
             <AdminDashboardBlock
               colSpan={1}
               title={"Reviews"}
               color={"#9747ff"}
               number={numbers?.reviews}
+              isLoading={isLoading}
             />
           </div>
           <div className="userEachMonthChart">

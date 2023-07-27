@@ -1,7 +1,7 @@
 import { useAuthUser } from "react-auth-kit";
 import { Navbar } from "../../../components/Common/navbar/Navbar";
 import "./userProfileCollection.scss";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Casino,
   Done,
@@ -23,14 +23,23 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { CollectionGameCards } from "../../../components/Cards/collectionGameCard/CollectionGameCards";
+import { UserProfilePicSkeleton } from "../../../components/UserProfilePicSkeleton/UserProfilePicSkeleton";
+import { handleCheckId } from "../userProfileOverviewPage/UserProfileOverview";
 
 const UserProfileCollection = () => {
+  const location = useLocation().pathname.split("/");
   const authUser = useAuthUser();
-  const userId = authUser().userId;
-  const location = useLocation().pathname.split("/")[3];
+  const navigate = useNavigate();
+  const userId = location[2];
+  const [userInfo, setUserInfo] = useState({});
   const [collection, setCollection] = useState([]);
   const [collectionStats, setCollectionStats] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+
+  const getUserInfo = async () => {
+    const res = await userRequest.get(`/user/getUserInfo/${userId}`);
+    setUserInfo(res.data);
+  };
 
   const getCollection = async () => {
     const res = await userRequest.get(`/collection/${userId}`);
@@ -42,8 +51,8 @@ const UserProfileCollection = () => {
     setCollectionStats(res.data);
     setIsLoading(false);
   };
-  console.log(isLoading);
   useEffect(() => {
+    getUserInfo();
     getCollection();
     getCollectionStats();
   }, []);
@@ -68,7 +77,6 @@ const UserProfileCollection = () => {
 
   const handleSetCollection = (data) => {
     setCollection(data);
-    console.log(data);
   };
 
   return (
@@ -77,16 +85,23 @@ const UserProfileCollection = () => {
       <div className="userProfileContainer">
         <div className="userProfileWrapper">
           <div className="userProfileUserInfo">
-            <div className="left">
-              <img src={authUser().profilePic} />
-              <h1>{authUser().username}</h1>
-            </div>
+            {!isLoading ? (
+              <div className="left">
+                <img src={userInfo.profilePicture} />
+                <h1>{userInfo.username}</h1>
+              </div>
+            ) : (
+              <UserProfilePicSkeleton />
+            )}
             <div className="right">
-              <Link to={`/userProfile/${userId}/Settings`}>
-                <button className="userProfileSettingBtn">
-                  <Settings style={{ marginRight: "5px" }} /> Settings
-                </button>
-              </Link>
+              <button
+                onClick={() =>
+                  handleCheckId(authUser().userId, userId, navigate)
+                }
+                className="userProfileSettingBtn"
+              >
+                <Settings style={{ marginRight: "5px" }} /> Settings
+              </button>
             </div>
           </div>
           <UserProfileMenu location={location} userId={userId} />

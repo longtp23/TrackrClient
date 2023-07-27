@@ -26,14 +26,10 @@ const Home = () => {
               <img src={platformIcons.lazada} />
               <h3>Lazada</h3>
             </div>
-            <div className="storePlatform">
-              <img src={platformIcons.tiki} />
-              <h3>Tiki</h3>
-            </div>
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

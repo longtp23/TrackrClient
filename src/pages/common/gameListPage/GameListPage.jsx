@@ -9,6 +9,8 @@ const GameListPage = () => {
   const handleFilters = (data) => {
     setFilters(data);
   };
+
+  
   return (
     <div>
       <Navbar />
@@ -19,6 +21,7 @@ const GameListPage = () => {
           price={filters.price}
           platforms={filters.platforms}
           genres={filters.genres}
+          searchQuery={filters.searchQuery}
         />
       </div>
     </div>

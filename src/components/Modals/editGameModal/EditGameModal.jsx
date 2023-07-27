@@ -6,7 +6,7 @@ import "./editGameModal.scss";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {userRequest} from "../../../requests/requestMethods"
-import {useToastError, useToastSuccess} from "../../../utils/toastSettings"
+import {useToastError, useToastShow, useToastSuccess} from "../../../utils/toastSettings"
 import dayjs from "dayjs";
 
 export const EditGameModal = ({ gameData }) => {
@@ -55,6 +55,7 @@ export const EditGameModal = ({ gameData }) => {
   }
 
   const handleConfirm = async () => {
+    useToastShow("Updating Game!")
     const res = await userRequest.put(`/game/edit/${gameData._id}`,{
       title: inputs.title,
       slug: inputs.slug,
@@ -148,7 +149,7 @@ export const EditGameModal = ({ gameData }) => {
                           label="Metascore"
                           variant="outlined"
                           name="metaScore"
-                          placeholder={gameData.metaScore.toString()}
+                          placeholder={gameData.metaScore ? gameData.metaScore.toString() : "No score"}
                           onChange={handleInputs}
                         />
                       </div>

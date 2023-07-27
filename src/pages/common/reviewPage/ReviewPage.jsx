@@ -1,12 +1,17 @@
 import {
   AccessTime,
+  ExpandMore,
   HourglassEmpty,
   SentimentVeryDissatisfied,
   ThumbDownAlt,
   ThumbUpAlt,
   ThumbsUpDown,
 } from "@mui/icons-material";
-import { CircularProgress, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import {
+  CircularProgress,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { ReviewCard } from "../../../components/Cards/reviewCard/ReviewCard";
 import { Navbar } from "../../../components/Common/navbar/Navbar";
@@ -29,10 +34,10 @@ const ReviewPage = () => {
   const handleTimePostedChange = (event, newTimePosted) => {
     setTimePosted(newTimePosted);
   };
-  const getReviews = async () => {
+  const getReviews = async (page) => {
     setIsLoading(true);
     const res = await publicRequest.post(
-      `/review/filter?reviewsPerPage=10&page=${page}`,
+      `/review/filter?reviewsPerPage=5&page=${page}`,
       {
         timePosted,
         ratings: ratingValue,
@@ -41,34 +46,23 @@ const ReviewPage = () => {
     );
     if (page === 1) {
       setReviews(res.data);
-      setIsLoading(false);
     } else {
       setReviews((prev) => [...prev, ...res.data]);
-      setIsLoading(false);
     }
+    setIsLoading(false);
   };
-
   useEffect(() => {
     setPage(1);
     setReviews([]);
   }, [timePosted, ratingValue, helpful]);
 
   useEffect(() => {
-    getReviews();
+    getReviews(page);
   }, [timePosted, ratingValue, helpful, page]);
 
-  const handleScroll = () => {
-    const scrollHeight = document.documentElement.scrollHeight;
-    const scrollTop = document.documentElement.scrollTop;
-    const windowHeight = window.innerHeight;
-    if (windowHeight + scrollTop + 1 >= scrollHeight) {
-      setPage((prev) => prev + 1);
-    }
+  const handleLoadMore = () => {
+    setPage((prev) => prev + 1);
   };
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
     <div>
@@ -140,9 +134,14 @@ const ReviewPage = () => {
           {!isLoading ? (
             <div className="reviewList">
               {reviews.length !== 0 ? (
-                reviews.map((review) => (
+                <div className="reviewListWrapper">
+                {reviews.map((review) => (
                   <ReviewCard key={review._id} review={review} />
-                ))
+                ))}
+                <div className="loadMoreButton">
+                  <button onClick={handleLoadMore}><ExpandMore/> Load more</button>
+                </div>
+                </div>
               ) : (
                 <div
                   style={{
@@ -165,7 +164,7 @@ const ReviewPage = () => {
             <div
               style={{
                 display: "flex",
-                flex:"4",
+                flex: "4",
                 justifyContent: "center",
                 alignItems: "center",
                 minHeight: "30vh",
