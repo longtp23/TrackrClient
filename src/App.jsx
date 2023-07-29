@@ -28,6 +28,7 @@ import UserProfileSettings from "./pages/user/userProfileSettingsPage/UserProfil
 import UserProfileWishlist from "./pages/user/userProfileWishlistPage/UserProfileWishlist";
 import { ScrollToTop } from "./utils/ScrollToTop";
 import ReviewPage from "./pages/common/reviewPage/ReviewPage";
+import ScrapeGameCopies from "./pages/admin/scrapeGameCopies/ScrapeGameCopies";
 
 function App() {
   const PrivateRoute = ({ Component }) => {
@@ -102,6 +103,10 @@ function App() {
             <Route
               path="/admin/addGame"
               element={<AdminRoute Component={AdminAddGame} />}
+            ></Route>
+            <Route
+              path="/admin/scrape"
+              element={<AdminRoute Component={ScrapeGameCopies} />}
             ></Route>
           </Routes>
         </HashRouter>

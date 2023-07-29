@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./adminSidebar.scss";
-import { AddCircle, Album, FirstPage, Games, Home, Logout, Person } from "@mui/icons-material";
+import { AddCircle, Album, FirstPage, Games, Home, Http, Logout, Person } from "@mui/icons-material";
 import { useSignOut } from "react-auth-kit";
 
 export const AdminSidebar = ({ authUser }) => {
@@ -41,6 +41,11 @@ const handleSignout = () => {
         <Link to="/admin/addGame">
         <div className={location === "addGame"?"adminSidebarItem selected" : "adminSidebarItem"}>
           <AddCircle /> <span>Add new game</span>
+        </div>
+        </Link>
+        <Link to="/admin/scrape">
+        <div className="adminSidebarItem">
+          <Http /> <span>Scrape for copies</span>
         </div>
         </Link>
         <Link to="/">

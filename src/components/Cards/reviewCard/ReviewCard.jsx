@@ -12,8 +12,13 @@ import styled from "styled-components";
 import { useState } from "react";
 import { ReplyCard } from "../replyCard/ReplyCard";
 import { toast } from "react-toastify";
-import { toastSettings } from "../../../utils/toastSettings";
+import {
+  toastSettings,
+  useToastError,
+  useToastSuccess,
+} from "../../../utils/toastSettings";
 import { ReplyFormModal } from "../../Modals/replyFormModal/ReplyFormModal";
+import { WarningModal } from "../../Modals/warningModal/WarningModal";
 
 const HelpfulButton = styled.button`
   background-color: ${(props) =>
@@ -31,14 +36,33 @@ const HelpfulButton = styled.button`
   }
 `;
 
+const DeleteReviewBtn = () => {
+  return (
+    <button
+      style={{
+        backgroundColor: "#ff4e27",
+        color: "black",
+        padding: "3px 10px",
+        borderRadius: "5px",
+      }}
+    >
+      Delete
+    </button>
+  );
+};
+
+const DeleteContent = () => {
+  return <p>Are you sure you want to delete this review</p>;
+};
+
 export const ReviewCard = ({ review, onReviewCardChange, style }) => {
   let borderColor;
   if (review.rating === "good") borderColor = "#14ae5c";
   if (review.rating === "bad") borderColor = "#f24822";
   if (review.rating === "neutral") borderColor = "#ffcd29";
 
-  const userAuth = useAuthUser();
-  const userId = userAuth()?.userId;
+  const authUser = useAuthUser();
+  const userId = authUser()?.userId;
   const [showReplies, setShowReplies] = useState(false);
 
   const handleShowReplies = () => {
@@ -67,6 +91,19 @@ export const ReviewCard = ({ review, onReviewCardChange, style }) => {
 
   const handleReplyChange = () => {
     onReviewCardChange();
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      const res = await userRequest.delete(
+        `/review/delete/${reviewId}?userId=${userId}`
+      );
+      if (res.data.type === "success") useToastSuccess(res.data.message);
+      else return useToastError("Something went wrong");
+      onReviewCardChange();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -130,7 +167,16 @@ export const ReviewCard = ({ review, onReviewCardChange, style }) => {
                 />
               </div>
             )}
+            {(review.userId === userId || authUser()?.isAdmin) && (
+              <WarningModal
+                InitiateComponent={DeleteReviewBtn}
+                WarningContent={DeleteContent}
+                confirmFunction={handleDeleteReview}
+                parameters={review._id}
+              />
+            )}
           </div>
+
           {!style && (
             <div className="helpfulButtons">
               this review was

@@ -188,7 +188,7 @@ const UserProfileWishlist = () => {
                           <div className="wishlistBestPrice">
                             Best price at{" "}
                             <b style={{ color: "#14ae5c" }}>
-                              ${formatPrice(game.lowestPriceAdded)}
+                              {formatPrice(game.lowestPriceAdded)}
                             </b>{" "}
                             on{" "}
                             <b style={{ color: pickRandomColor() }}>
