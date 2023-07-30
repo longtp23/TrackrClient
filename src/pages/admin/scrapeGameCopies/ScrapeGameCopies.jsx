@@ -24,6 +24,7 @@ import { formatTimePosted } from "../../../utils/formatStrings";
 import { useToastError, useToastShow } from "../../../utils/toastSettings";
 import "./scrapeGameCopies.scss";
 import { LazadaConfirmModal } from "../../../components/Modals/lazadaConfirmModal/LazadaConfirmModal";
+import { ScrapeGameConfirmModal } from "../../../components/Modals/scrapeGameConfirmModal/ScrapeGameConfirmModal";
 
 const ScrapeWebstoreBtn = () => {
   return (
@@ -50,6 +51,19 @@ const ScrapeLazadaBtn = () => {
     </button>
   );
 };
+const ScrapeGamesBtn = () => {
+  return (
+    <button
+      style={{
+        backgroundColor: "#9747ff",
+        color: "black",
+      }}
+    >
+      <span>Scrape Games</span>
+      <Games fontSize="inherit" />
+    </button>
+  );
+};
 const NotifyUsersBtn = () => {
   return (
     <button
@@ -71,6 +85,9 @@ const ScrapeContent = () => {
 const NotifyUserContent = () => {
   return <p>Are you sure you want to manually send notifications to users</p>;
 };
+const ScrapeGameContent = () => {
+  return <p>Are you sure you want to scrape for new games</p>;
+};
 
 const ScrapeGameCopies = () => {
   const authUser = useAuthUser();
@@ -78,6 +95,7 @@ const ScrapeGameCopies = () => {
   const [scraperStatus, setScraperStatus] = useState("");
   const [lastScrapedInfo, setLastScrapedInfo] = useState({});
   const [lastScrapedWebstoreInfo, setLastScrapedWebstoreInfo] = useState({});
+  const [lastScrapedGamesInfo, setLastScrapedGamesInfo] = useState({});
   const getStatus = async () => {
     try {
       const res = await scrapeRequest.get("/scrape/status");
@@ -87,6 +105,14 @@ const ScrapeGameCopies = () => {
     }
   };
 
+  const getLastScrapedGamesInfo = async () => {
+    try {
+      const res = await scrapeRequest.get("/scrape/getLastScrapeGames");
+      setLastScrapedGamesInfo(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const getLastScrapedWebstoreInfo = async () => {
     try {
       const res = await scrapeRequest.get("/scrape/getLastScrapeWebstore");
@@ -109,6 +135,7 @@ const ScrapeGameCopies = () => {
   useEffect(() => {
     getStatus();
     getLastScrapedWebstoreInfo();
+    getLastScrapedGamesInfo();
     getLastScrapedLazadaInfo();
   }, []);
 
@@ -174,6 +201,9 @@ const ScrapeGameCopies = () => {
                 <LazadaConfirmModal InitiateComponent={ScrapeLazadaBtn} />
               </div>
               <div className="scrapeBtn">
+                <ScrapeGameConfirmModal InitiateComponent={ScrapeGamesBtn} />
+              </div>
+              <div className="scrapeBtn">
                 <WarningModal
                   InitiateComponent={NotifyUsersBtn}
                   WarningContent={NotifyUserContent}
@@ -231,8 +261,9 @@ const ScrapeGameCopies = () => {
                         Last scraped games:{" "}
                       </span>
 
-                      {lastScrapedInfo.lastScrapeGames.map((game) => (
+                      {lastScrapedInfo.lastScrapeGames.map((game, index) => (
                         <div
+                          key={index}
                           className="scrapedGame"
                           style={{ borderColor: pickRandomColor() }}
                         >
@@ -294,6 +325,62 @@ const ScrapeGameCopies = () => {
                         }}
                       >
                         {lastScrapedWebstoreInfo.lastScrapeAtStore}
+                      </span>
+                    </div>
+                  </AccordionDetails>
+                ) : (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      padding: "30px",
+                    }}
+                  >
+                    <CircularProgress />
+                  </div>
+                )}
+              </Accordion>
+            </div>
+            <div className="webstoreAccordionWrapper">
+              <Accordion defaultExpanded>
+                <AccordionSummary expandIcon={<ExpandMore />}>
+                  <div className="accordionTitle">
+                    <Info style={{ marginRight: "10px", color: "#0d9aff" }} />{" "}
+                    Games info
+                  </div>
+                </AccordionSummary>
+                {!isLoading ? (
+                  <AccordionDetails>
+                    <div className="webstoreInfoItem">
+                      <span>
+                        <AccessTime style={{ marginRight: "10px" }} /> Last
+                        scraped at:{" "}
+                      </span>
+                      <span
+                        style={{
+                          color: "#14ae5c",
+                          marginLeft: "15px",
+                          fontWeight: "bold",
+                          fontSize: "25px",
+                        }}
+                      >
+                        {formatTimePosted(lastScrapedGamesInfo.lastScrapeAt)}
+                      </span>
+                    </div>
+                    <div className="webstoreInfoItem">
+                      <span>
+                        <Language style={{ marginRight: "10px" }} /> Last
+                        scraped at store:{" "}
+                      </span>
+                      <span
+                        style={{
+                          color: "#0d9aff",
+                          marginLeft: "15px",
+                          fontWeight: "bold",
+                          fontSize: "25px",
+                        }}
+                      >
+                        {lastScrapedGamesInfo.lastScrapePlatform}
                       </span>
                     </div>
                   </AccordionDetails>
