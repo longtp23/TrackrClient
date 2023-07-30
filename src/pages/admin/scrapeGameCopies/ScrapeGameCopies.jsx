@@ -7,6 +7,7 @@ import {
   Games,
   Info,
   Language,
+  NotificationsActive,
 } from "@mui/icons-material";
 import {
   Accordion,
@@ -49,9 +50,26 @@ const ScrapeLazadaBtn = () => {
     </button>
   );
 };
+const NotifyUsersBtn = () => {
+  return (
+    <button
+      style={{
+        backgroundColor: "#f24822",
+        color: "black",
+      }}
+    >
+      <span>Notify Users</span>
+      <NotificationsActive fontSize="inherit" />
+    </button>
+  );
+};
 
 const ScrapeContent = () => {
   return <p>Are you sure you want to initiate the scraper </p>;
+};
+
+const NotifyUserContent = () => {
+  return <p>Are you sure you want to manually send notifications to users</p>;
 };
 
 const ScrapeGameCopies = () => {
@@ -59,6 +77,7 @@ const ScrapeGameCopies = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [scraperStatus, setScraperStatus] = useState("");
   const [lastScrapedInfo, setLastScrapedInfo] = useState({});
+  const [lastScrapedWebstoreInfo, setLastScrapedWebstoreInfo] = useState({});
   const getStatus = async () => {
     try {
       const res = await scrapeRequest.get("/scrape/status");
@@ -67,7 +86,17 @@ const ScrapeGameCopies = () => {
       console.log(error);
     }
   };
-  const getLastScrapedInfo = async () => {
+
+  const getLastScrapedWebstoreInfo = async () => {
+    try {
+      const res = await scrapeRequest.get("/scrape/getLastScrapeWebstore");
+      setLastScrapedWebstoreInfo(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getLastScrapedLazadaInfo = async () => {
     try {
       const res = await scrapeRequest.get("/scrape/getLastScrape");
       setLastScrapedInfo(res.data);
@@ -79,7 +108,8 @@ const ScrapeGameCopies = () => {
 
   useEffect(() => {
     getStatus();
-    getLastScrapedInfo();
+    getLastScrapedWebstoreInfo();
+    getLastScrapedLazadaInfo();
   }, []);
 
   const handleScrapeWebstore = async () => {
@@ -92,8 +122,17 @@ const ScrapeGameCopies = () => {
     }
   };
 
+  const handleNotifyUsers = async () => {
+    try {
+      useToastShow("Sending notifications to users");
+      await scrapeRequest.get("/user");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const pickRandomColor = () => {
-    const textColors = ["#ffcd29", "#f24822", "#9747ff", "#14ae5c", "#0d9aff" ];
+    const textColors = ["#ffcd29", "#f24822", "#9747ff", "#14ae5c", "#0d9aff"];
     return textColors[Math.floor(Math.random() * textColors.length)];
   };
 
@@ -132,15 +171,20 @@ const ScrapeGameCopies = () => {
                 />
               </div>
               <div className="scrapeBtn">
-                <LazadaConfirmModal
-                  InitiateComponent={ScrapeLazadaBtn}
+                <LazadaConfirmModal InitiateComponent={ScrapeLazadaBtn} />
+              </div>
+              <div className="scrapeBtn">
+                <WarningModal
+                  InitiateComponent={NotifyUsersBtn}
+                  WarningContent={NotifyUserContent}
+                  confirmFunction={handleNotifyUsers}
                 />
               </div>
             </div>
           </div>
           <div className="scraperRight">
             <div className="lazadaAccordionWrapper">
-              <Accordion defaultExpanded>
+              <Accordion>
                 <AccordionSummary expandIcon={<ExpandMore />}>
                   <div className="accordionTitle">
                     <Info style={{ marginRight: "10px", color: "#0d9aff" }} />{" "}
@@ -151,28 +195,116 @@ const ScrapeGameCopies = () => {
                   <AccordionDetails>
                     <div className="lazadaInfoItem">
                       <span>
-                        <AccessTime style={{marginRight:"10px"}}/> Last scraped at:{" "}
+                        <AccessTime style={{ marginRight: "10px" }} /> Last
+                        scraped at:{" "}
                       </span>
-                      <span style={{color:"#14ae5c", marginLeft:"15px", fontWeight:"bold", fontSize:"25px"}}>
+                      <span
+                        style={{
+                          color: "#14ae5c",
+                          marginLeft: "15px",
+                          fontWeight: "bold",
+                          fontSize: "25px",
+                        }}
+                      >
                         {formatTimePosted(lastScrapedInfo.lastScrapeAt)}
                       </span>
                     </div>
                     <div className="lazadaInfoItem">
                       <span>
-                        <Description style={{marginRight:"10px"}}/> Last scraped at page:{" "}
+                        <Description style={{ marginRight: "10px" }} /> Last
+                        scraped at page:{" "}
                       </span>
-                      <span style={{color:"#0d9aff", marginLeft:"15px", fontWeight:"bold", fontSize:"25px"}}>{lastScrapedInfo.lastScrapeAtPage}</span>
+                      <span
+                        style={{
+                          color: "#0d9aff",
+                          marginLeft: "15px",
+                          fontWeight: "bold",
+                          fontSize: "25px",
+                        }}
+                      >
+                        {lastScrapedInfo.lastScrapeAtPage}
+                      </span>
                     </div>
                     <div className="lazadaGameItem">
-                      <span><Games style={{marginRight:"10px"}}/>Last scraped games: </span>
+                      <span>
+                        <Games style={{ marginRight: "10px" }} />
+                        Last scraped games:{" "}
+                      </span>
 
                       {lastScrapedInfo.lastScrapeGames.map((game) => (
-                        <div className="scrapedGame" style={{borderColor: pickRandomColor()}}>{game}</div>
+                        <div
+                          className="scrapedGame"
+                          style={{ borderColor: pickRandomColor() }}
+                        >
+                          {game}
+                        </div>
                       ))}
                     </div>
                   </AccordionDetails>
                 ) : (
-                  <div style={{display:"flex", justifyContent:"center", padding:"30px"}}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      padding: "30px",
+                    }}
+                  >
+                    <CircularProgress />
+                  </div>
+                )}
+              </Accordion>
+            </div>
+            <div className="webstoreAccordionWrapper">
+              <Accordion defaultExpanded>
+                <AccordionSummary expandIcon={<ExpandMore />}>
+                  <div className="accordionTitle">
+                    <Info style={{ marginRight: "10px", color: "#0d9aff" }} />{" "}
+                    Webstore info
+                  </div>
+                </AccordionSummary>
+                {!isLoading ? (
+                  <AccordionDetails>
+                    <div className="webstoreInfoItem">
+                      <span>
+                        <AccessTime style={{ marginRight: "10px" }} /> Last
+                        scraped at:{" "}
+                      </span>
+                      <span
+                        style={{
+                          color: "#14ae5c",
+                          marginLeft: "15px",
+                          fontWeight: "bold",
+                          fontSize: "25px",
+                        }}
+                      >
+                        {formatTimePosted(lastScrapedWebstoreInfo.lastScrapeAt)}
+                      </span>
+                    </div>
+                    <div className="webstoreInfoItem">
+                      <span>
+                        <Language style={{ marginRight: "10px" }} /> Last
+                        scraped at store:{" "}
+                      </span>
+                      <span
+                        style={{
+                          color: "#0d9aff",
+                          marginLeft: "15px",
+                          fontWeight: "bold",
+                          fontSize: "25px",
+                        }}
+                      >
+                        {lastScrapedWebstoreInfo.lastScrapeAtStore}
+                      </span>
+                    </div>
+                  </AccordionDetails>
+                ) : (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      padding: "30px",
+                    }}
+                  >
                     <CircularProgress />
                   </div>
                 )}
