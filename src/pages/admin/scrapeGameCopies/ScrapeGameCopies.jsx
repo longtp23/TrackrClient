@@ -370,7 +370,7 @@ const ScrapeGameCopies = () => {
                     <div className="webstoreInfoItem">
                       <span>
                         <Language style={{ marginRight: "10px" }} /> Last
-                        scraped at store:{" "}
+                        scraped platform:{" "}
                       </span>
                       <span
                         style={{
