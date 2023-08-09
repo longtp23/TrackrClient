@@ -6,7 +6,7 @@ import {
 } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useAuthUser } from "react-auth-kit";
+import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import styled from "styled-components";
@@ -18,7 +18,12 @@ import { ReviewFormModal } from "../../../components/Modals/reviewFormModal/Revi
 import { ReviewList } from "../../../components/reviewList/ReviewList";
 import { platformIcons } from "../../../utils/platformIcons";
 import { publicRequest, userRequest } from "../../../requests/requestMethods";
-import { toastSettings, useToastError, useToastShow, useToastSuccess } from "../../../utils/toastSettings";
+import {
+  toastSettings,
+  useToastError,
+  useToastShow,
+  useToastSuccess,
+} from "../../../utils/toastSettings";
 import { GameCopiesEcommerceDataGrid } from "../../../components/DataGrid/gameCopiesEcommerceDataGrid/GameCopiesEcommerceDataGrid";
 import {
   formatReleaseDate,
@@ -34,13 +39,15 @@ const DetailContainer = styled.div`
 `;
 
 const GameDetail = () => {
-  const location = useLocation()
+  const location = useLocation();
   const slug = location.pathname.split("/")[2];
-  const userAuth = useAuthUser();
+  const authUser = useAuthUser();
   const [gameDetail, setGameDetail] = useState();
   const [updateReview, setUpdateReview] = useState(0);
   const navigate = useNavigate();
-  const userId = userAuth()?.userId;
+  const userId = authUser()?.userId;
+  const isAuthenticated = useIsAuthenticated();
+  const auth = isAuthenticated();
   const releaseYear = formatReleaseYear(gameDetail?.releaseDate);
 
   const getLowestPrice = (data, count) => {
@@ -51,7 +58,7 @@ const GameDetail = () => {
   };
 
   const handleAddToWishlist = async () => {
-    if (!userAuth()) navigate("/login");
+    if (!authUser()) return navigate("/login");
 
     const gameAdded = gameDetail?._id;
     try {
@@ -72,8 +79,7 @@ const GameDetail = () => {
           storeAdded: bestPriceCopy[0].storeName,
         },
       });
-      if (res.data.type === "success")
-        useToastSuccess(res.data.message);
+      if (res.data.type === "success") useToastSuccess(res.data.message);
       else useToastError(res.data.message);
     } catch (error) {
       console.log(error);
@@ -81,19 +87,18 @@ const GameDetail = () => {
   };
 
   const handleAddToCollection = async () => {
-    if (!userAuth()) navigate("/login");
+    if (!authUser()) return navigate("/login");
 
     const gameId = gameDetail?._id;
     const gameImg = gameDetail?.backgroundImage;
     const gameSlug = gameDetail?.slug;
     const gameTitle = gameDetail?.title;
-    useToastShow("Adding game to your collection")
+    useToastShow("Adding game to your collection");
     try {
       const res = await userRequest.put(`/collection/addGame/${userId}`, {
         game: { gameId, gameImg, gameSlug, gameTitle, releaseYear },
       });
-      if (res.data.type === "success")
-        useToastSuccess(res.data.message);
+      if (res.data.type === "success") useToastSuccess(res.data.message);
       else useToastError(res.data.message);
     } catch (error) {
       console.log(error);
@@ -272,10 +277,18 @@ const GameDetail = () => {
                   <div className="gameCopiesTableWrapper">
                     <Accordion defaultExpanded={true}>
                       <AccordionSummary
-                        sx={{ backgroundColor: "#282828", color: "white", padding:"10px", fontSize:"20px" }}
+                        sx={{
+                          backgroundColor: "#282828",
+                          color: "white",
+                          padding: "10px",
+                          fontSize: "20px",
+                        }}
                         expandIcon={<ExpandMore />}
                       >
-                        <div style={{marginLeft:"9px"}} className="accordionTitle">
+                        <div
+                          style={{ marginLeft: "9px" }}
+                          className="accordionTitle"
+                        >
                           <Language sx={{ marginRight: "10px" }} />
                           <span>Web Stores Price</span>
                         </div>
@@ -290,11 +303,16 @@ const GameDetail = () => {
                   <div className="gameCopiesTableWrapper">
                     <Accordion>
                       <AccordionSummary
-                        sx={{ backgroundColor: "#282828", color: "white", padding:"10px", fontSize:"20px" }}
+                        sx={{
+                          backgroundColor: "#282828",
+                          color: "white",
+                          padding: "10px",
+                          fontSize: "20px",
+                        }}
                         expandIcon={<ExpandMore />}
                       >
                         <div className="accordionTitle">
-                          <img src={platformIcons.lazada}  />
+                          <img src={platformIcons.lazada} />
                           <span>Lazada Price</span>
                         </div>
                       </AccordionSummary>

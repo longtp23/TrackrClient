@@ -135,12 +135,14 @@ const ReviewPage = () => {
             <div className="reviewList">
               {reviews.length !== 0 ? (
                 <div className="reviewListWrapper">
-                {reviews.map((review) => (
-                  <ReviewCard key={review._id} review={review} />
-                ))}
-                <div className="loadMoreButton">
-                  <button onClick={handleLoadMore}><ExpandMore/> Load more</button>
-                </div>
+                  {reviews.map((review) => (
+                    <ReviewCard key={review._id} review={review} />
+                  ))}
+                  <div className="loadMoreButton">
+                    <button onClick={handleLoadMore}>
+                      <ExpandMore /> Load more
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div

@@ -18,11 +18,12 @@ import {
   useToastSuccess,
 } from "../../../utils/toastSettings";
 import "./reviewFormModal.scss";
+import { useNavigate } from "react-router-dom";
 
 export const ReviewFormModal = ({ gameId, updateReview }) => {
   let [isOpen, setIsOpen] = useState(false);
   const authUser = useAuthUser();
-
+  const navigate = useNavigate();
   const [stores, setStores] = useState([]);
   const [ratingValue, setRatingValue] = useState("good");
   const [inputs, setInputs] = useState({});
@@ -46,7 +47,7 @@ export const ReviewFormModal = ({ gameId, updateReview }) => {
     if (!gameId || !ratingValue || !inputs.reviewContent || !inputs.storeName) {
       useToastError("Invalid Submission!");
     } else {
-    useToastShow("Sending Review!")
+      useToastShow("Sending Review!");
       const res = await userRequest.post(`/review/${authUser().userId}`, {
         gameId,
         rating: ratingValue,
@@ -74,6 +75,7 @@ export const ReviewFormModal = ({ gameId, updateReview }) => {
   };
 
   const openModal = () => {
+    if (!authUser()) return navigate("/login");
     setIsOpen(true);
   };
   return (

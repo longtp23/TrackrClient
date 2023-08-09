@@ -11,7 +11,6 @@ export const LazadaConfirmModal = ({ InitiateComponent }) => {
   const handleInput = (e) => {
     setInput(e.target.value);
   };
-  console.log(input);
   function closeModal() {
     setIsOpen(false);
   }
