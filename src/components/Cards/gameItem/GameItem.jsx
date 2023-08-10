@@ -21,6 +21,7 @@ export const GameItem = ({ gameData }) => {
     const getGameCopies = async () => {
       const res = await publicRequest.post("/gameCopy/search", {
         title: gameData.title,
+        storeName: "all"
       });
       const bestPriceCopies = getLowestPrice(res.data, 3);
       setGameCopies(bestPriceCopies);

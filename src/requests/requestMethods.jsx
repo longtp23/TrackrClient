@@ -2,7 +2,6 @@ import axios from "axios";
 
 const BASE_URL = "https://trackr-api.onrender.com/api";
 // const BASE_URL = "http://localhost:9000/api";
-// const BASE_URL = "http://192.168.2.90:9000/api";
 
 // const SCRAPER_URL = "http://localhost:8006/scraper"
 const SCRAPER_URL = "https://trackr-scraper.onrender.com/scraper";
